@@ -1,8 +1,6 @@
 # NAME
 
-```
 deploy - web サーバー準備からソースコード更新手順
-```
 
 # SYNOPSIS
 

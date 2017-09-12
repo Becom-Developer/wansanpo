@@ -6,6 +6,84 @@ wansanpo - 犬のお散歩マッチングサービス
 
 ## URL
 
+- <http://153.126.137.205/> - 開発用サーバー
+
+## START APP
+
+アプリケーションスタート
+
+### お手元の PC
+
+```
+(WEBフレームワークを起動 development モード)
+$ carton exec -- morbo script/wansanpo
+
+(終了時は control + c で終了)
+```
+
+コマンドラインで morbo サーバー実行後、web ブラウザ `http://localhost:3000/` で確認
+
+### 開発サーバー
+
+web サーバー nginx 通常はつねに稼働中、サーバーの起動は root 権限
+
+```
+(サーバースタート)
+# nginx
+
+(サーバーを停止)
+# nginx -s quit
+```
+
+app サーバー hypnotoad
+
+```
+(production モード)
+$ carton exec -- hypnotoad script/wansanpo
+
+(停止)
+$ carton exec -- hypnotoad --stop script/wansanpo
+```
+
+web ブラウザ <http://153.126.137.205/> で確認
+
+## TEST
+
+テストコードを実行
+
+```
+(テストコードを起動の際は mode を切り替え)
+$ carton exec -- script/wansanpo test --mode testing
+
+(テスト結果を詳細に出力)
+$ carton exec -- script/wansanpo test -v --mode testing
+
+(テスト結果を詳細かつ個別に出力)
+$ carton exec -- script/wansanpo test -v --mode testing t/wansanpo.t
+```
+
+## DEPLOY
+
+1. github -> ローカル環境へ pull (最新の状態にしておく)
+1. ローカル環境 -> github へ push (修正を反映)
+1. github -> vpsサーバーへ pull (vpsサーバーへ反映)
+1. アプリケーション再起動
+
+```
+(ローカル環境から各自のアカウントでログイン)
+$ ssh taniguti@153.126.137.205
+
+(アプリケーションユーザーに)
+$ sudo su - wansanpo
+
+(移動後、git 更新)
+$ cd ~/wansanpo/
+$ git pull origin master
+
+(再起動)
+$ carton exec -- hypnotoad script/wansanpo
+```
+
 # DESCRIPTION
 
 # TODO
@@ -72,6 +150,8 @@ wansanpo - 犬のお散歩マッチングサービス
 - ログイン認証のロジック
 
 ### 認証で保護された領域の開発
+
+__`/doc/sanpo/` を参照__
 
 - ログイン完了時の画面
 - ユーザー情報編集画面
