@@ -6,7 +6,59 @@ wansanpo - 犬のお散歩マッチングサービス
 
 ## URL
 
-- <http://153.126.137.205/> - 開発用サーバー
+<http://nyans.work/> - 開発用サーバー
+
+## LOCAL SETUP
+
+お手元の開発環境設定
+
+### INSTALL
+
+環境構築、準備
+
+#### git clone
+
+お手元の PC に任意のディレクトリを準備後、 github サイトよりリポジトリを取得
+
+<https://github.com/ykHakata/wansanpo> - wansanpo / github サイト
+
+```
+(例: ホームディレクト配下に github 用のディレクトリ作成)
+$ mkdir ~/github
+
+# github ディレクトリ配下に wansanpo リポジトリ展開
+$ cd ~/github
+$ git clone git@github.com:ykHakata/wansanpo.git
+```
+
+#### Perl install
+
+```bash
+# 5.26.0 を使用
+$ cd ~/github/wansanpo/
+$ cat .perl-version
+5.26.0
+```
+
+plenv を活用し、perl 5.26.0, cpnam, carton までのインストールを実行
+
+手順の参考
+
+<https://github.com/ykHakata/summary/blob/master/perl5_install.md> - perl5_install / perl5 ローカル環境での設定手順
+
+#### Mojolicious install
+
+Mojolicious を始めとする必要なモジュール一式のインストール実行
+
+```
+(cpanfile に必要なモジュール情報が記載)
+$ cd ~/github/wansanpo/
+$ cat cpanfile
+requires 'Mojolicious', '== 7.45';
+
+(carton を使いインストール実行)
+$ carton install
+```
 
 ## START APP
 
@@ -45,7 +97,7 @@ $ carton exec -- hypnotoad script/wansanpo
 $ carton exec -- hypnotoad --stop script/wansanpo
 ```
 
-web ブラウザ <http://153.126.137.205/> で確認
+web ブラウザ <http://nyans.work/> で確認
 
 ## TEST
 
@@ -60,6 +112,9 @@ $ carton exec -- script/wansanpo test -v --mode testing
 
 (テスト結果を詳細かつ個別に出力)
 $ carton exec -- script/wansanpo test -v --mode testing t/wansanpo.t
+
+(自動で testing になるように設定している)
+$ carton exec -- script/wansanpo test -v t/wansanpo.t
 ```
 
 ## DEPLOY
