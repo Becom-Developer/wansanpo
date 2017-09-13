@@ -3,13 +3,17 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
-          <h5 class="centered">お散歩メニュー</h5>
+          <p class="centered"><a href=""><img src="/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
+          <h5 class="centered">nyans メニュー</h5>
           <li class="mt">
-            <a class="active" href="/info">
-                          <i class="fa fa-dashboard"></i>
-                          <span>info</span>
-                      </a>
+            <a class="<%== $class_active->{index} =%>" href="/info"><i class="fa fa-book"></i><span>info</span></a>
+          </li>
+          <li class="sub-menu">
+            <a class="<%== $class_active->{intro} =%>" href="javascript:;"><i class="fa fa-cogs"></i><span>Wansanpo Prototype</span></a>
+            <ul class="sub">
+              <li class="<%== $class_active->{intro} =%>" ><a href="/info/intro">Introduction</a></li>
+              <li><a href="/auth/login">Login</a></li>
+            </ul>
           </li>
         </ul>
         <!-- sidebar menu end-->

@@ -17,6 +17,7 @@ sub startup {
     # 告知サイト
     $r->get('/')->to('Info#index');
     $r->get('/info')->to('Info#index');
+    $r->get('/info/intro')->to('Info#intro');
 
     # 認証関連
     $r->get('/auth/entry')->to('Auth#entry');
