@@ -7,11 +7,11 @@ sub menu {
     $self->stash(
         class_active => +{
             wansanpo => 'active',
-            menu    => 'active',
+            menu     => 'active',
         }
     );
     $self->render(
-        template => 'sunpo/menu',
+        template => 'sanpo/menu',
         format   => 'html',
         handler  => 'ep',
     );

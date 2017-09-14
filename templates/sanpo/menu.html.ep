@@ -21,6 +21,33 @@
           <p>アプリメニュー</p>
         </div>
       </div>
+      % if ( my $flash_msg = flash('flash_msg') ) {
+        <div class="alert alert-success"><b><%== $flash_msg =%></b></div>
+      % }
+      <!-- BUTTON BLOCK -->
+      <div class="showback">
+        <h4><i class="fa fa-angle-right"></i> 個人情報の確認、編集をします</h4>
+        <a href="/sanpo/profile/1" role="button" type="" class="btn btn-warning btn-lg btn-block">ユーザー</a>
+      </div>
+      <!--/showback -->
+      <!-- BUTTON BLOCK -->
+      <div class="showback">
+        <h4><i class="fa fa-angle-right"></i> ペットの登録や他のペットを探せます</h4>
+        <a href="/" role="button" type="" class="btn btn-warning btn-lg btn-block">ペット</a>
+      </div>
+      <!--/showback -->
+      <!-- BUTTON BLOCK -->
+      <div class="showback">
+        <h4><i class="fa fa-angle-right"></i> 散歩仲間とメッセージをやりとりします</h4>
+        <a href="/" role="button" type="" class="btn btn-warning btn-lg btn-block">メッセージ</a>
+      </div>
+      <!--/showback -->
+      <!-- BUTTON BLOCK -->
+      <div class="showback">
+        <h4><i class="fa fa-angle-right"></i> お散歩情報がさがせます</h4>
+        <a href="/" role="button" type="" class="btn btn-warning btn-lg btn-block">お散歩</a>
+      </div>
+      <!--/showback -->
     </section>
     <!-- /wrapper -->
   </section>

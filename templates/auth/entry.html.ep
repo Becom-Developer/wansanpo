@@ -22,10 +22,7 @@
         </div>
       </div>
       % if ( my $flash_msg = flash('flash_msg') ) {
-      <div class="showback">
-        <h4><i class="fa fa-angle-right"></i> メッセージがあります</h4>
         <div class="alert alert-success"><b><%== $flash_msg =%></b></div>
-      </div><!-- /showback -->
       % }
       <!-- INLINE FORM ELELEMNTS -->
       <div class="row mt">

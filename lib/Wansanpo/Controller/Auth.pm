@@ -51,16 +51,10 @@ sub store_login {
 
     # 認証
 
-    # 書き込み保存終了、リダイレクト終了
     $self->flash( flash_msg => 'ユーザーログインしました' );
-    $self->redirect_to('/');
-
-    # メニュー画面できたら遷移
-    # $self->redirect_to('/sanpo/menu');
+    $self->redirect_to('/sanpo/menu');
     return;
 }
-
-
 
 sub logout {
     my $self = shift;
