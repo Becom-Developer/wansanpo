@@ -234,7 +234,7 @@ CREATE TABLE user (                                     -- ユーザー
     login_id        TEXT,                               -- ログインID名 (例: 'wansanpo@gmail.com')
     password        TEXT,                               -- ログインパスワード (例: 'wansanpo')
     approved        INTEGER,                            -- 承認フラグ (例: 0: 承認していない, 1: 承認済み)
-    authority       INTEGER,                            -- 権限 (例: 0: 権限なし, 1: root, 2: sudo, 3: admin, 4: general, 5: guest, 6:customr)
+    authority       INTEGER,                            -- 権限 (例: 0: 権限なし, 1: root, 2: sudo, 3: admin, 4: general, 5: guest, 6:customer)
     deleted         INTEGER,                            -- 削除フラグ (例: 0: 削除していない, 1: 削除済み)
     created_ts      TEXT,                               -- 登録日時 (例: '2016-01-08 12:24:12')
     modified_ts     TEXT                                -- 修正日時 (例: '2016-01-08 12:24:12')

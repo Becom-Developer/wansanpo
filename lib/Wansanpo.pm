@@ -21,10 +21,14 @@ sub startup {
 
     # 認証関連
     $r->get('/auth/entry')->to('Auth#entry');
-    $r->post('/auth/entry')->to('Auth#entry');
+    $r->post('/auth/entry')->to('Auth#store_entry');
     $r->get('/auth/login')->to('Auth#login');
-    $r->post('/auth/login')->to('Auth#login');
+    $r->post('/auth/login')->to('Auth#store_login');
     $r->post('/auth/logout')->to('Auth#logout');
+
+    # 認証保護されたページ
+    # アプリメニュー
+    $r->get('/sanpo/menu')->to('Sanpo#menu');
 }
 
 1;

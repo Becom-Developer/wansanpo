@@ -9,10 +9,12 @@
             <a class="<%== $class_active->{index} =%>" href="/info"><i class="fa fa-book"></i><span>info</span></a>
           </li>
           <li class="sub-menu">
-            <a class="<%== $class_active->{intro} =%>" href="javascript:;"><i class="fa fa-cogs"></i><span>Wansanpo Prototype</span></a>
+            <a class="<%== $class_active->{wansanpo} =%>" href="javascript:;"><i class="fa fa-cogs"></i><span>Wansanpo Prototype</span></a>
             <ul class="sub">
-              <li class="<%== $class_active->{intro} =%>" ><a href="/info/intro">Introduction</a></li>
-              <li><a href="/auth/login">Login</a></li>
+              <li class="<%== $class_active->{intro} =%>" ><a href="/info/intro">Introduction / 紹介</a></li>
+              <li class="<%== $class_active->{entry} =%>" ><a href="/auth/entry">Entry / ユーザー登録</a></li>
+              <li><a href="/auth/login">Login / ログイン画面</a></li>
+              <li class="<%== $class_active->{menu} =%>" ><a href="/sanpo/menu">Menu / アプリメニュー</a></li>
             </ul>
           </li>
         </ul>

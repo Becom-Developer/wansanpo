@@ -16,7 +16,12 @@ sub index {
 # wansanpo 紹介
 sub intro {
     my $self = shift;
-    $self->stash( class_active => +{ intro => 'active' } );
+    $self->stash(
+        class_active => +{
+            wansanpo => 'active',
+            intro    => 'active',
+        }
+    );
     $self->render(
         template => 'info/intro',
         format   => 'html',
