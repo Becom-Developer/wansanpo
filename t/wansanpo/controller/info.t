@@ -13,11 +13,9 @@ subtest 'router' => sub {
     # 302リダイレクトレスポンスの許可
     $t->ua->max_redirects(1);
 
-    $t->get_ok('/auth/entry')->status_is(200);
-    $t->post_ok('/auth/entry')->status_is(200);
-    $t->get_ok('/auth/login')->status_is(200);
-    $t->post_ok('/auth/login')->status_is(200);
-    $t->post_ok('/auth/logout')->status_is(200);
+    $t->get_ok('/')->status_is(200);
+    $t->get_ok('/info')->status_is(200);
+    $t->get_ok('/info/intro')->status_is(200);
 
     # 必ず戻す
     $t->ua->max_redirects(0);
@@ -27,4 +25,4 @@ done_testing();
 
 __END__
 
-package Wansanpo::Controller::Auth;
+package Wansanpo::Controller::Info;
