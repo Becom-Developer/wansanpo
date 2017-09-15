@@ -1,13 +1,39 @@
 package Wansanpo;
 use Mojo::Base 'Mojolicious';
-
+use Data::Dumper;
 # This method will run once at server start
 sub startup {
     my $self = shift;
 
+    # my $home = $self->home->detect;
+    # warn Dumper($home->child('etc')->to_string);
+
+
+    # warn Dumper($self->home->detect);
+    # warn Dumper($self->home->mojo_lib_dir);
+
+    # my $path = $self->home->mojo_lib_dir;
+    # warn Dumper($path);
+    # warn $path;
+
+    # my $etc_dir     = $self->home->rel_dir('etc');
+    my $home = $self->home->detect;
+
+
+    my $etc_dir     = $home->detect->child('etc')->to_string;
+
+    my $mode        = $self->mode;
+    my $moniker     = $self->moniker;
+    my $conf_file   = qq{$etc_dir/$moniker.$mode.conf};
+    my $common_file = qq{$etc_dir/$moniker.common.conf};
+
+    # # # 設定ファイル (読み込む順番に注意)
+    $self->plugin( Config => +{ file => $common_file } );
+    # $self->plugin( Config => +{ file => $conf_file } );
+
     # Load configuration from hash returned by "my_app.conf"
     my $config = $self->plugin('Config');
-
+    # warn Dumper($config);
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer') if $config->{perldoc};
 
