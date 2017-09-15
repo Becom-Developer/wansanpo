@@ -14,7 +14,7 @@ sub startup {
     # 設定ファイル (読み込む順番に注意)
     $self->plugin( Config => +{ file => $common } );
     $self->plugin( Config => +{ file => $conf } );
-    my $config = $self->plugin('Config');
+    my $config = $self->config;
 
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer') if $config->{perldoc};
