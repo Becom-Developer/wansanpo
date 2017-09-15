@@ -1,39 +1,21 @@
 package Wansanpo;
 use Mojo::Base 'Mojolicious';
 use Data::Dumper;
-# This method will run once at server start
+
 sub startup {
     my $self = shift;
 
-    # my $home = $self->home->detect;
-    # warn Dumper($home->child('etc')->to_string);
+    my $mode    = $self->mode;
+    my $moniker = $self->moniker;
+    my $home    = $self->home;
+    my $common  = $home->child( 'etc', "$moniker.common.conf" )->to_string;
+    my $conf    = $home->child( 'etc', "$moniker.$mode.conf" )->to_string;
 
-
-    # warn Dumper($self->home->detect);
-    # warn Dumper($self->home->mojo_lib_dir);
-
-    # my $path = $self->home->mojo_lib_dir;
-    # warn Dumper($path);
-    # warn $path;
-
-    # my $etc_dir     = $self->home->rel_dir('etc');
-    my $home = $self->home->detect;
-
-
-    my $etc_dir     = $home->detect->child('etc')->to_string;
-
-    my $mode        = $self->mode;
-    my $moniker     = $self->moniker;
-    my $conf_file   = qq{$etc_dir/$moniker.$mode.conf};
-    my $common_file = qq{$etc_dir/$moniker.common.conf};
-
-    # # # 設定ファイル (読み込む順番に注意)
-    $self->plugin( Config => +{ file => $common_file } );
-    # $self->plugin( Config => +{ file => $conf_file } );
-
-    # Load configuration from hash returned by "my_app.conf"
+    # 設定ファイル (読み込む順番に注意)
+    $self->plugin( Config => +{ file => $common } );
+    $self->plugin( Config => +{ file => $conf } );
     my $config = $self->plugin('Config');
-    # warn Dumper($config);
+
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer') if $config->{perldoc};
 
@@ -57,11 +39,11 @@ sub startup {
     $r->get('/sanpo/menu')->to('Sanpo#menu');
 
     # ユーザー情報
-    $r->get('/sanpo/profile/:id')->to('Sanpo::Profile#show'); # ユーザー情報詳細
-    $r->get('/sanpo/profile/:id/edit')->to('Sanpo::Profile#edit'); # ユーザー情報編集画面
-    $r->get('/sanpo/profile/search')->to('Sanpo::Profile#search'); # ユーザー情報検索(お仲間)
-    $r->post('/sanpo/profile/:id/update')->to('Sanpo::Profile#update'); # ユーザー情報更新実行
-    $r->post('/sanpo/profile/:id/remove')->to('Sanpo::Profile#remove'); # ユーザー情報削除(退会)
+    $r->get('/sanpo/profile/:id')->to('Sanpo::Profile#show');
+    $r->get('/sanpo/profile/:id/edit')->to('Sanpo::Profile#edit');
+    $r->get('/sanpo/profile/search')->to('Sanpo::Profile#search');
+    $r->post('/sanpo/profile/:id/update')->to('Sanpo::Profile#update');
+    $r->post('/sanpo/profile/:id/remove')->to('Sanpo::Profile#remove');
 
     # ペット情報
 
@@ -75,23 +57,23 @@ sub startup {
 
     # wansanpo メッセージ
 
-    # - GET - `/sanpo/message/:id` - メッセージ詳細
-    # - GET - `/sanpo/message/create` - メッセージを新規作成する画面
-    # - POST - `/sanpo/message` - メッセージ新規登録実行
-    # - GET - `/sanpo/message/:id/edit` - メッセージを編集する画面
-    # - POST - `/sanpo/message/:id/update` - メッセージを更新実行
-    # - GET - `/sanpo/message/search` - メッセージ情報検索画面
-    # - POST - `/sanpo/message/:id/remove` - メッセージ情報削除
+# - GET - `/sanpo/message/:id` - メッセージ詳細
+# - GET - `/sanpo/message/create` - メッセージを新規作成する画面
+# - POST - `/sanpo/message` - メッセージ新規登録実行
+# - GET - `/sanpo/message/:id/edit` - メッセージを編集する画面
+# - POST - `/sanpo/message/:id/update` - メッセージを更新実行
+# - GET - `/sanpo/message/search` - メッセージ情報検索画面
+# - POST - `/sanpo/message/:id/remove` - メッセージ情報削除
 
     # 預け、預かり
 
-    # - GET - `/sanpo/deposit/:id` - 預け、預かり詳細
-    # - GET - `/sanpo/deposit/create` - 預け依頼を新規作成する画面
-    # - POST - `/sanpo/deposit` - 預け依頼新規登録実行
-    # - GET - `/sanpo/deposit/:id/edit` - 預け依頼を編集する画面
-    # - POST - `/sanpo/deposit/:id/update` - 預け依頼を更新実行
-    # - GET - `/sanpo/deposit/search` - 預け、預かり情報検索画面
-    # - POST - `/sanpo/deposit/:id/remove` - 預け、預かり情報削除
+   # - GET - `/sanpo/deposit/:id` - 預け、預かり詳細
+   # - GET - `/sanpo/deposit/create` - 預け依頼を新規作成する画面
+   # - POST - `/sanpo/deposit` - 預け依頼新規登録実行
+   # - GET - `/sanpo/deposit/:id/edit` - 預け依頼を編集する画面
+   # - POST - `/sanpo/deposit/:id/update` - 預け依頼を更新実行
+   # - GET - `/sanpo/deposit/search` - 預け、預かり情報検索画面
+   # - POST - `/sanpo/deposit/:id/remove` - 預け、預かり情報削除
 }
 
 1;
