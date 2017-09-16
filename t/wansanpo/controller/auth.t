@@ -24,10 +24,8 @@ subtest 'router' => sub {
     $t->ua->max_redirects(0);
 };
 
-# ユーザー登録実行
+# ユーザー登録
 subtest '/auth/entry' => sub {
-    my @all = $t->app->test_db->teng->search( 'user', +{} );
-    ok( scalar @all );
 
     # エントリー画面
     subtest 'template' => sub {

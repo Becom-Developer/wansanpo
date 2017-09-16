@@ -1,5 +1,6 @@
 package Wansanpo::Model::Sanpo;
 use Mojo::Base 'Wansanpo::Model::Base';
+use Wansanpo::Model::Sanpo::Profile;
 
 =encoding utf8
 
@@ -10,7 +11,7 @@ Wansanpo::Model::Sanpo - コントローラーモデル
 =cut
 
 has profile => sub {
-    HackerzLab::Model::Sanpo::Profile->new( +{ conf => shift->conf } );
+    Wansanpo::Model::Sanpo::Profile->new( +{ conf => shift->conf } );
 };
 
 # 呼び出しテスト

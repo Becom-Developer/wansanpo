@@ -31,44 +31,44 @@ sub init {
     return $t;
 }
 
-# # ログインする
-# sub login_admin {
-#     my $t = shift;
+# ログインする
+sub login {
+    my $t = shift;
 
-#     # テスト用の user データの存在確認
-#     my $row = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
-#     ok($row);
+    # テスト用の user データの存在確認
+    my $row = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
+    ok($row);
 
-#     my $params = +{
-#         login_id => $row->login_id,
-#         password => $row->password,
-#     };
+    my $params = +{
+        login_id => $row->login_id,
+        password => $row->password,
+    };
 
-#     # 302リダイレクトレスポンスの許可
-#     $t->ua->max_redirects(1);
-#     $t->post_ok( '/admin/login' => form => $params )->status_is(200);
-#     $t->content_like(qr{\Qログインしました\E});
-#     $t->ua->max_redirects(0);
-#     return;
-# }
+    # 302リダイレクトレスポンスの許可
+    $t->ua->max_redirects(1);
+    $t->post_ok( '/auth/login' => form => $params )->status_is(200);
+    $t->content_like(qr{\Q<b>ユーザーログインしました</b>\E});
+    $t->ua->max_redirects(0);
+    return;
+}
 
-# # ログアウトする
-# sub logout_admin {
-#     my $t = shift;
+# ログアウトする
+sub logout {
+    my $t = shift;
 
-#     # ログアウトの実行
-#     $t->post_ok('/admin/logout')->status_is(302);
+    # ログアウトの実行
+    $t->post_ok('/auth/logout')->status_is(302);
 
-#     # リダイレクト先の確認
-#     my $location_url = '/admin/logout';
-#     $t->header_is( location => $location_url );
+    # リダイレクト先の確認
+    my $location_url = '/info/intro';
+    $t->header_is( location => $location_url );
 
-#     # リダイレクト先でアクセス後、セッション確認
-#     $t->get_ok($location_url)->status_is(200);
-#     my $session_id = $t->app->build_controller( $t->tx )->session('login_id');
-#     is( $session_id, undef, 'session_id' );
-#     return;
-# }
+    # リダイレクト先でアクセス後、セッション確認
+    $t->get_ok($location_url)->status_is(200);
+    my $session_id = $t->app->build_controller( $t->tx )->session('user');
+    is( $session_id, undef, 'session_id' );
+    return;
+}
 
 1;
 

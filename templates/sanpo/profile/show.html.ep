@@ -22,7 +22,7 @@
         </div>
       </div>
       % if ( my $msg = flash('msg') ) {
-      <div class="alert alert-success"><b><%== $msg =%></b></div>
+      <div class="alert alert-success"><b><%== $msg %></b></div>
       % }
       <!-- BASIC FORM ELELEMNTS -->
       <div class="row mt">
@@ -31,82 +31,85 @@
             <h4 class="mb"><i class="fa fa-angle-right"></i> ユーザープロフィール</h4>
             <form class="form-horizontal style-form">
               <div class="form-group">
-                <label class="col-lg-2 col-sm-2 control-label">ID</label>
+                <label class="col-lg-2 col-sm-2 control-label">アイコン画像</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.id</p>
+                  <p class="form-control-static"><%= $profile->{icon} %></p>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-lg-2 col-sm-2 control-label">ユーザーID</label>
+                <label class="col-lg-2 col-sm-2 control-label">ログインID</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.user_id</p>
+                  <p class="form-control-static"><%= $user->{login_id} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">名前</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.name</p>
+                  <p class="form-control-static"><%= $profile->{name} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">ふりがな</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.rubi</p>
+                  <p class="form-control-static"><%= $profile->{rubi} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">ニックネーム</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.nickname</p>
+                  <p class="form-control-static"><%= $profile->{nickname} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">Eメール</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.email</p>
+                  <p class="form-control-static"><%= $profile->{email} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">電話番号</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.tel</p>
+                  <p class="form-control-static"><%= $profile->{tel} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">性別</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.gender</p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 col-sm-2 control-label">アイコン画像</label>
-                <div class="col-lg-10">
-                  <p class="form-control-static">profile.icon</p>
+                  <p class="form-control-static"><%= $profile->{gender} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">生年月日</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.birthday</p>
+                  <p class="form-control-static"><%= $profile->{birthday} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">郵便番号</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.zipcode</p>
+                  <p class="form-control-static"><%= $profile->{zipcode} %></p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">住所</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static">profile.address</p>
+                  <p class="form-control-static"><%= $profile->{address} %></p>
                 </div>
+              </div>
+              <%# ペットの情報 %>
+              <div class="form-group">
+                <label class="col-lg-2 col-sm-2 control-label">ペット</label>
+              % for my $pet (@{$pets}) {
+                <div class="col-lg-10">
+                  <p class="form-control-static"><%= $pet->{type} %> - <%= $pet->{name} %></p>
+                </div>
+              % }
               </div>
             </form>
             <!-- BUTTON BLOCK -->
             <div class="showback">
               <h4><i class="fa fa-angle-right"></i> ユーザー情報の編集をします</h4>
-              <a href="/sanpo/profile/1/edit" role="button" type="" class="btn btn-warning btn-lg btn-block">編集画面</a>
+              <a href="/sanpo/profile/<%= $profile->{id} %>/edit" role="button" type="" class="btn btn-warning btn-lg btn-block">編集画面</a>
             </div>
             <!--/showback -->
           </div>

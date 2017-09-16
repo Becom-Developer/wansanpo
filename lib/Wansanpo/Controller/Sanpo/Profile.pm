@@ -4,17 +4,20 @@ use Mojo::Base 'Wansanpo::Controller::Sanpo';
 # ユーザー情報詳細
 sub show {
     my $self = shift;
+    my $params = +{ id => $self->stash->{id}, };
+
+    my $profile_model = $self->model->sanpo->profile->req_params($params);
+    $self->stash($profile_model->to_template_show);
     $self->stash(
         class_active => +{
             wansanpo => 'active',
             profile  => 'active',
-        }
-    );
-    $self->render(
+        },
         template => 'sanpo/profile/show',
         format   => 'html',
         handler  => 'ep',
     );
+    $self->render;
     return;
 }
 

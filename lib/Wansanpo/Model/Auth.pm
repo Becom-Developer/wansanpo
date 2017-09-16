@@ -89,7 +89,7 @@ sub session_check {
         deleted  => 0,
     };
     my $user = $self->db->teng->single( 'user', $cond );
-    return 1 if $user;
+    return $user if $user;
     return;
 }
 
