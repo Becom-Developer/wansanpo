@@ -1,6 +1,6 @@
 package Wansanpo;
 use Mojo::Base 'Mojolicious';
-use Data::Dumper;
+use Wansanpo::Model;
 
 sub startup {
     my $self = shift;
@@ -19,6 +19,49 @@ sub startup {
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer') if $config->{perldoc};
 
+    # コマンドをロードするための他の名前空間
+    push @{ $self->commands->namespaces }, 'Wansanpo::Command';
+
+    # コントローラーモデル
+    $self->helper(
+        model => sub { Wansanpo::Model->new( +{ conf => $config } ); } );
+
+    # ルーティング前に共通して実行
+    $self->hook(
+        before_dispatch => sub {
+            my $c   = shift;
+            my $url = $c->req->url;
+
+            # 認証中はアクセスできない
+            if ( $url =~ m{^/auth/login} ) {
+                if ( $c->session('user') ) {
+                    $c->flash( msg =>
+                            'ログイン中はアクセスできません' );
+                    $c->redirect_to('/info/intro');
+                    return;
+                }
+            }
+            $self->helper( login_user => sub {undef} );
+
+            # 認証保護されたページ
+            if ( $url =~ m{^/sanpo} ) {
+
+                # セッション情報からログイン者の情報を取得
+                my $auth_model = $self->model->auth->req_params(
+                    +{ login_id => $c->session('user') } );
+                if ( my $login_user = $auth_model->session_check ) {
+                    $self->helper( login_user => sub {$login_user} );
+                    return;
+                }
+
+                # セッション無き場合ログインページへ
+                $c->flash( msg => 'ログインが必要です' );
+                $c->redirect_to('/auth/login');
+                return;
+            }
+        }
+    );
+
     # Router
     my $r = $self->routes;
 
@@ -31,7 +74,7 @@ sub startup {
     $r->get('/auth/entry')->to('Auth#entry');
     $r->post('/auth/entry')->to('Auth#store_entry');
     $r->get('/auth/login')->to('Auth#login');
-    $r->post('/auth/login')->to('Auth#store_login');
+    $r->post('/auth/login')->to('Auth#check_login');
     $r->post('/auth/logout')->to('Auth#logout');
 
     # 認証保護されたページ

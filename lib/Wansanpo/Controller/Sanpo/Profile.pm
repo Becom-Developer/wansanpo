@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Sanpo::Profile;
-use Mojo::Base 'Mojolicious::Controller';
+use Mojo::Base 'Wansanpo::Controller::Sanpo';
 
 # ユーザー情報詳細
 sub show {

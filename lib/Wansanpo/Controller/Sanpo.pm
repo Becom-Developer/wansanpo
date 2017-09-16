@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Sanpo;
-use Mojo::Base 'Mojolicious::Controller';
+use Mojo::Base 'Wansanpo::Controller';
 
 # ユーザ登録画面
 sub menu {

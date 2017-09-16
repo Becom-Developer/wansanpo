@@ -21,8 +21,8 @@
           <p>アプリメニュー</p>
         </div>
       </div>
-      % if ( my $flash_msg = flash('flash_msg') ) {
-        <div class="alert alert-success"><b><%== $flash_msg =%></b></div>
+      % if ( my $msg = flash('msg') ) {
+        <div class="alert alert-success"><b><%== $msg =%></b></div>
       % }
       <!-- BUTTON BLOCK -->
       <div class="showback">
