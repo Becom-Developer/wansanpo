@@ -31,9 +31,10 @@
             <h4 class="mb"><i class="fa fa-angle-right"></i> ユーザープロフィール</h4>
             <form class="form-horizontal style-form">
               <div class="form-group">
-                <label class="col-lg-2 col-sm-2 control-label">アイコン画像</label>
-                <div class="col-lg-10">
-                  <p class="form-control-static"><%= $profile->{icon} %></p>
+                <%# アイコン画像 %>
+                <label class="col-lg-2 col-sm-2 control-label"></label>
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                  <p class="form-control-static"><img class="img-responsive" src="/img/icon/<%= $profile->{icon} %>" alt=""></p>
                 </div>
               </div>
               <div class="form-group">
