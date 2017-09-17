@@ -89,14 +89,13 @@ sub startup {
     $r->post('/sanpo/profile/:id/remove')->to('Sanpo::Profile#remove');
 
     # ペット情報
-
-    # - GET - `/sanpo/pet/:id` - ペット情報詳細
-    # - GET - `/sanpo/pet/:id/edit` - ペット情報編集画面
-    # - GET - `/sanpo/pet/create` - ペット情報新規登録画面
-    # - POST - `/sanpo/pet` - ペット情報新規登録実行
-    # - GET - `/sanpo/pet/search` - ペット情報検索
-    # - POST - `/sanpo/pet/:id/update` - ペット情報更新実行
-    # - POST - `/sanpo/pet/:id/remove` - ペット情報削除
+    $r->get('/sanpo/pet/:id/edit')->to('Sanpo::Pet#edit');
+    $r->post('/sanpo/pet/:id/update')->to('Sanpo::Pet#update');
+    $r->post('/sanpo/pet/:id/remove')->to('Sanpo::Pet#remove');
+    $r->get('/sanpo/pet/create')->to('Sanpo::Pet#create');
+    $r->get('/sanpo/pet/search')->to('Sanpo::Pet#search');
+    $r->post('/sanpo/pet')->to('Sanpo::Pet#store');
+    $r->get('/sanpo/pet/:id')->to('Sanpo::Pet#show');
 
     # wansanpo メッセージ
 

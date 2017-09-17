@@ -15,7 +15,7 @@
               <li class="<%== $class_active->{entry} || '' =%>" ><a href="/auth/entry">Entry / ユーザー登録</a></li>
               <li><a href="/auth/login">Login / ログイン画面</a></li>
               <li class="<%== $class_active->{menu} || '' =%>" ><a href="/sanpo/menu">Menu / アプリメニュー</a></li>
-              <li class="<%== $class_active->{profile} || '' =%>" ><a href="/sanpo/profile/1">Profile / ユーザー情報</a></li>
+              <li class="<%== $class_active->{profile} || '' =%>" ><a href="/sanpo/profile/search">Profile / ユーザー情報</a></li>
             </ul>
           </li>
         </ul>

@@ -42,7 +42,11 @@
                     <h6><%= $row->{address} %></h6>
                   </div>
                   <div class=" centered">
+                  % if (app->login_user->id eq $row->{user_id}) {
+                    <a href="/sanpo/profile/<%= $row->{id} %>" role="button" type="" class="btn btn-success btn-lg btn-block">詳細画面(わたし)</a>
+                  % } else {
                     <a href="/sanpo/profile/<%= $row->{id} %>" role="button" type="" class="btn btn-warning btn-lg btn-block">詳細画面</a>
+                  % }
                   </div>
                   <div class="centered">
                     <h6><i class="fa fa-envelope"></i><br/><%= $row->{email} %></h6>
