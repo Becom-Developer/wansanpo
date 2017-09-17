@@ -52,7 +52,20 @@ sub store {
 # ペット情報検索
 sub search {
     my $self = shift;
-    $self->render( text => 'search' );
+
+    # 今回は検索機能は実装しない
+    my $pet_model = $self->model->sanpo->pet;
+    $self->stash( $pet_model->to_template_search );
+    $self->stash(
+        class_active => +{
+            wansanpo => 'active',
+            pet      => 'active',
+        },
+        template => 'sanpo/pet/search',
+        format   => 'html',
+        handler  => 'ep',
+    );
+    $self->render;
     return;
 }
 

@@ -33,7 +33,7 @@
       <!-- BUTTON BLOCK -->
       <div class="showback">
         <h4><i class="fa fa-angle-right"></i> ペットの登録や他のペットを探せます</h4>
-        <a href="/" role="button" type="" class="btn btn-warning btn-lg btn-block">ペット</a>
+        <a href="/sanpo/pet/search" role="button" type="" class="btn btn-warning btn-lg btn-block">ペット</a>
       </div>
       <!--/showback -->
       <!-- BUTTON BLOCK -->

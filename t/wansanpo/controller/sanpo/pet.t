@@ -38,8 +38,8 @@ subtest 'show' => sub {
         my @pet_rows   = $t->app->test_db->teng->search( 'pet', $cond );
         is( scalar @pet_rows, 1, 'count' );
         my $pet_row = shift @pet_rows;
-        my $pet_id = $pet_row->id;
-        my $url        = "/sanpo/pet/$pet_id";
+        my $pet_id  = $pet_row->id;
+        my $url     = "/sanpo/pet/$pet_id";
         $t->get_ok($url)->status_is(200);
 
         # 主な部分のみ
@@ -55,8 +55,29 @@ subtest 'show' => sub {
     t::Util::logout($t);
 };
 
+subtest 'search' => sub {
+
+    # ログインをする
+    t::Util::login($t);
+    subtest 'template' => sub {
+        my $url = "/sanpo/pet/search";
+        $t->get_ok($url)->status_is(200);
+        my $cond = +{ deleted => 0 };
+        my @pets = $t->app->test_db->teng->search( 'pet', $cond );
+
+        # 主な部分のみ、詳細画面へのリンクボタン
+        for my $pet (@pets) {
+            my $id = $pet->id;
+            $t->element_exists("a[href=/sanpo/pet/$id]");
+        }
+    };
+
+    # ログアウトをする
+    t::Util::logout($t);
+};
+
 done_testing();
 
 __END__
 
-package Wansanpo::Controller::Sanpo::Profile;
+package Wansanpo::Controller::Sanpo::Pet;

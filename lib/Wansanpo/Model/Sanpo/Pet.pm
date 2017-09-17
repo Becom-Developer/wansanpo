@@ -53,7 +53,7 @@ sub to_template_show {
     my $user_hash_ref    = $pet_row->fetch_user->get_columns;
     my $profile_hash_ref = $pet_row->fetch_user->fetch_profile->get_columns;
 
-    my $master = $self->db->master;
+    my $master     = $self->db->master;
     my $gender_pet = $master->gender_pet->word( $pet_hash_ref->{gender} );
     $pet_hash_ref->{gender_word} = $gender_pet;
     my $gender = $master->gender->word( $profile_hash_ref->{gender} );
@@ -65,43 +65,54 @@ sub to_template_show {
     };
 }
 
-# sub to_template_search {
-#     my $self = shift;
+sub to_template_search {
+    my $self = shift;
 
-#     my $cond = +{ deleted => 0, };
-#     my @pet_rows = $self->db->teng->search( 'pet', $cond );
-#     return if !scalar @pet_rows;
+    my $cond = +{ deleted => 0, };
+    my @pet_rows = $self->db->teng->search( 'pet', $cond );
+    return if !scalar @pet_rows;
 
-#     my $pets_hash_ref = [ map { $_->get_columns } @pet_rows ];
+    # 飼い主の情報を追記
+    # my $pets_hash_ref = [ map { $_->get_columns } @pet_rows ];
 
-#     # 3の倍数になっているか
-#     while (1) {
-#         my $rows   = scalar @{$pets_hash_ref};
-#         my $result = $rows % 3;
-#         last if $result eq 0;
-#         push @{$pets_hash_ref}, +{};
-#     }
+    my $pets_hash_ref = [];
+    for my $pet_row (@pet_rows) {
+        my $profile_hash_ref
+            = $pet_row->fetch_user->fetch_profile->get_columns;
+        my $hash = $pet_row->get_columns;
+        $hash->{address} = $profile_hash_ref->{address};
+        $hash->{email}   = $profile_hash_ref->{email};
+        push @{$pets_hash_ref}, $hash;
+    }
 
-#     # こんな感じに
-#     # [
-#     #     [+{},+{},+{},],
-#     #     [+{},+{},+{},],
-#     #     ... ,
-#     # ]
-#     my $pets = [];
-#     my $line     = [];
-#     while ( my $row = shift @{$pets_hash_ref} ) {
-#         push @{$line}, $row;
-#         my $count  = scalar @{$line};
-#         my $result = $count % 3;
-#         if ( $result eq 0 ) {
-#             push @{$pets}, $line;
-#             $line = [];
-#             next;
-#         }
-#     }
-#     return +{ pets => $pets, };
-# }
+    # 3の倍数になっているか
+    while (1) {
+        my $rows   = scalar @{$pets_hash_ref};
+        my $result = $rows % 3;
+        last if $result eq 0;
+        push @{$pets_hash_ref}, +{};
+    }
+
+    # こんな感じに
+    # [
+    #     [+{},+{},+{},],
+    #     [+{},+{},+{},],
+    #     ... ,
+    # ]
+    my $pets = [];
+    my $line = [];
+    while ( my $row = shift @{$pets_hash_ref} ) {
+        push @{$line}, $row;
+        my $count  = scalar @{$line};
+        my $result = $count % 3;
+        if ( $result eq 0 ) {
+            push @{$pets}, $line;
+            $line = [];
+            next;
+        }
+    }
+    return +{ pets => $pets, };
+}
 
 1;
 
