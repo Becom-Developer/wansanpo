@@ -75,7 +75,7 @@
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">性別</label>
                 <div class="col-lg-10">
-                  <p class="form-control-static"><%= $profile->{gender} %></p>
+                  <p class="form-control-static"><%= $profile->{gender_word} %></p>
                 </div>
               </div>
               <div class="form-group">

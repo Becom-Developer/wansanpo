@@ -56,6 +56,23 @@ sub deleted {
     return $self;
 }
 
+# gender 性別
+sub gender {
+    my $self = shift;
+    my $hash = +{
+        1 => '男性',
+        2 => '女性',
+    };
+
+    my $constant = +{
+        MALE   => 1,
+        FEMALE => 2,
+    };
+    $self->master_hash($hash);
+    $self->master_constant_hash($constant);
+    return $self;
+}
+
 # 単語から id を求める
 sub word_id {
     my $self = shift;

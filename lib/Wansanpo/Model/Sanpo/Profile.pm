@@ -36,6 +36,11 @@ sub to_template_show {
     my $user_hash_ref    = $profile_row->fetch_user->get_columns;
     my $pet_rows         = $profile_row->search_pet;
     my $pers_hash_ref    = [ map { $_->get_columns } @{$pet_rows} ];
+
+    my $master = $self->db->master;
+    my $gender = $master->gender->word( $profile_hash_ref->{gender} );
+    $profile_hash_ref->{gender_word} = $gender;
+
     return +{
         user    => $user_hash_ref,
         pets    => $pers_hash_ref,
