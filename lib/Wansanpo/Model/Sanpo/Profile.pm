@@ -48,6 +48,44 @@ sub to_template_show {
     };
 }
 
+sub to_template_search {
+    my $self = shift;
+
+    my $cond = +{ deleted => 0, };
+    my @profile_rows = $self->db->teng->search( 'profile', $cond );
+    return if !scalar @profile_rows;
+
+    my $profiles_hash_ref = [ map { $_->get_columns } @profile_rows ];
+
+    # 3の倍数になっているか
+    while (1) {
+        my $rows = scalar @{$profiles_hash_ref};
+        my $result = $rows % 3;
+        last if $result eq 0;
+        push @{$profiles_hash_ref}, +{};
+    }
+
+    # こんな感じに
+    # [
+    #     [+{},+{},+{},],
+    #     [+{},+{},+{},],
+    #     ... ,
+    # ]
+    my $profiles = [];
+    my $line = [];
+    while (my $row = shift @{$profiles_hash_ref}) {
+        push @{$line}, $row;
+        my $count = scalar @{$line};
+        my $result = $count % 3;
+        if ($result eq 0) {
+            push @{$profiles}, $line;
+            $line = [];
+            next;
+        }
+    }
+    return +{ profiles => $profiles, };
+}
+
 1;
 
 __END__

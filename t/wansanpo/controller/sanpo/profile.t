@@ -43,8 +43,31 @@ subtest 'show' => sub {
         my $id   = $profile->id;
         $t->content_like(qr{\Q$name\E});
 
-        # 編集画面へのボタン
+        # ボタン確認 編集画面, 検索, メニュー
         $t->element_exists("a[href=/sanpo/profile/$id/edit]");
+        $t->element_exists("a[href=/sanpo/profile/search]");
+        $t->element_exists("a[href=/sanpo/menu]");
+    };
+
+    # ログアウトをする
+    t::Util::logout($t);
+};
+
+subtest 'search' => sub {
+
+    # ログインをする
+    t::Util::login($t);
+    subtest 'template' => sub {
+        my $url = "/sanpo/profile/search";
+        $t->get_ok($url)->status_is(200);
+        my $cond = +{ deleted => 0 };
+        my @profiles = $t->app->test_db->teng->search( 'profile', $cond );
+
+        # 主な部分のみ、詳細画面へのリンクボタン
+        for my $profile (@profiles) {
+            my $id = $profile->id;
+            $t->element_exists("a[href=/sanpo/profile/$id]");
+        }
     };
 
     # ログアウトをする

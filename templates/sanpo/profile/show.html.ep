@@ -107,10 +107,24 @@
               % }
               </div>
             </form>
+            % if ($is_login_user) {
             <!-- BUTTON BLOCK -->
             <div class="showback">
               <h4><i class="fa fa-angle-right"></i> ユーザー情報の編集をします</h4>
               <a href="/sanpo/profile/<%= $profile->{id} %>/edit" role="button" type="" class="btn btn-warning btn-lg btn-block">編集画面</a>
+            </div>
+            <!--/showback -->
+            % }
+            <!-- BUTTON BLOCK -->
+            <div class="showback">
+              <h4><i class="fa fa-angle-right"></i> お仲間の検索をします</h4>
+              <a href="/sanpo/profile/search" role="button" type="" class="btn btn-warning btn-lg btn-block">ユーザー情報検索</a>
+            </div>
+            <!--/showback -->
+            <!-- BUTTON BLOCK -->
+            <div class="showback">
+              <h4><i class="fa fa-angle-right"></i> アプリメニューへ戻ります</h4>
+              <a href="/sanpo/menu" role="button" type="" class="btn btn-warning btn-lg btn-block">アプリメニュー</a>
             </div>
             <!--/showback -->
           </div>

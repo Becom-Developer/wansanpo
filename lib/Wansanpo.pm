@@ -82,9 +82,9 @@ sub startup {
     $r->get('/sanpo/menu')->to('Sanpo#menu');
 
     # ユーザー情報
+    $r->get('/sanpo/profile/search')->to('Sanpo::Profile#search');
     $r->get('/sanpo/profile/:id')->to('Sanpo::Profile#show');
     $r->get('/sanpo/profile/:id/edit')->to('Sanpo::Profile#edit');
-    $r->get('/sanpo/profile/search')->to('Sanpo::Profile#search');
     $r->post('/sanpo/profile/:id/update')->to('Sanpo::Profile#update');
     $r->post('/sanpo/profile/:id/remove')->to('Sanpo::Profile#remove');
 

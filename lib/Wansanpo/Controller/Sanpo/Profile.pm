@@ -7,9 +7,16 @@ sub show {
     my $params = +{ id => $self->stash->{id}, };
 
     my $profile_model = $self->model->sanpo->profile->req_params($params);
-    $self->stash($profile_model->to_template_show);
+    $self->stash( $profile_model->to_template_show );
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user;
+    if ( $self->login_user->id eq $self->stash->{id} ) {
+        $is_login_user = 1;
+    }
     $self->stash(
-        class_active => +{
+        is_login_user => $is_login_user,
+        class_active  => +{
             wansanpo => 'active',
             profile  => 'active',
         },
@@ -31,7 +38,20 @@ sub edit {
 # ユーザー情報検索(お仲間)
 sub search {
     my $self = shift;
-    $self->render( text => 'search' );
+
+    # 今回は検索機能は実装しない
+    my $profile_model = $self->model->sanpo->profile;
+    $self->stash( $profile_model->to_template_search );
+    $self->stash(
+        class_active => +{
+            wansanpo => 'active',
+            profile  => 'active',
+        },
+        template => 'sanpo/profile/search',
+        format   => 'html',
+        handler  => 'ep',
+    );
+    $self->render;
     return;
 }
 

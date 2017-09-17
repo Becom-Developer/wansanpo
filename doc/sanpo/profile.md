@@ -21,6 +21,7 @@ sanpo/profile - wansanpo ユーザー情報
 ユーザーに紐づくペットのリスト表示
 編集画面へのボタン
 ユーザー情報検索へのボタン
+アプリメニューへのボタン
 ```
 
 ## GET - `/sanpo/profile/:id/edit` - ユーザー情報編集画面
@@ -31,6 +32,9 @@ sanpo/profile - wansanpo ユーザー情報
 ## GET - `/sanpo/profile/search` - ユーザー情報検索(お仲間)
 
 ```
+登録ユーザー情報をすべて表示
+各ユーザー詳細画面へのリンクボタン
+各ユーザーのアイコン、住所、メール表示
 ```
 
 ## POST - `/sanpo/profile/:id/update` - ユーザー情報更新実行
