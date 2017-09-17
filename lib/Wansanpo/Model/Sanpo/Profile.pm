@@ -18,6 +18,23 @@ sub welcome {
     return 'welcome Wansanpo::Model::Sanpo::Profile!!';
 }
 
+# ログイン者であることの確認
+sub is_login_user {
+    my $self       = shift;
+    my $user_id    = shift;
+    my $profile_id = $self->req_params->{id};
+    return if !$user_id;
+    return if !$profile_id;
+    my $cond = +{
+        id      => $profile_id,
+        user_id => $user_id,
+        deleted => 0,
+    };
+    my $profile_row = $self->db->teng->single( 'profile', $cond );
+    return if !$profile_row;
+    return 1;
+}
+
 # テンプレ一覧用値取得
 sub to_template_show {
     my $self       = shift;
@@ -59,7 +76,7 @@ sub to_template_search {
 
     # 3の倍数になっているか
     while (1) {
-        my $rows = scalar @{$profiles_hash_ref};
+        my $rows   = scalar @{$profiles_hash_ref};
         my $result = $rows % 3;
         last if $result eq 0;
         push @{$profiles_hash_ref}, +{};
@@ -72,12 +89,12 @@ sub to_template_search {
     #     ... ,
     # ]
     my $profiles = [];
-    my $line = [];
-    while (my $row = shift @{$profiles_hash_ref}) {
+    my $line     = [];
+    while ( my $row = shift @{$profiles_hash_ref} ) {
         push @{$line}, $row;
-        my $count = scalar @{$line};
+        my $count  = scalar @{$line};
         my $result = $count % 3;
-        if ($result eq 0) {
+        if ( $result eq 0 ) {
             push @{$profiles}, $line;
             $line = [];
             next;

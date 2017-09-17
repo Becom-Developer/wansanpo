@@ -4,7 +4,27 @@ use Mojo::Base 'Wansanpo::Controller::Sanpo';
 # ペット情報詳細
 sub show {
     my $self = shift;
-    $self->render( text => 'show' );
+    my $params = +{ id => $self->stash->{id}, };
+
+    my $pet_model = $self->model->sanpo->pet->req_params($params);
+    $self->stash( $pet_model->to_template_show );
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user;
+    if ( $pet_model->is_login_user( $self->login_user->id ) ) {
+        $is_login_user = 1;
+    }
+    $self->stash(
+        is_login_user => $is_login_user,
+        class_active  => +{
+            wansanpo => 'active',
+            pet      => 'active',
+        },
+        template => 'sanpo/pet/show',
+        format   => 'html',
+        handler  => 'ep',
+    );
+    $self->render;
     return;
 }
 

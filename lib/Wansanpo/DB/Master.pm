@@ -73,6 +73,23 @@ sub gender {
     return $self;
 }
 
+# gender_pet 性別 pet 用
+sub gender_pet {
+    my $self = shift;
+    my $hash = +{
+        1 => 'オス',
+        2 => 'メス',
+    };
+
+    my $constant = +{
+        MALE   => 1,
+        FEMALE => 2,
+    };
+    $self->master_hash($hash);
+    $self->master_constant_hash($constant);
+    return $self;
+}
+
 # 単語から id を求める
 sub word_id {
     my $self = shift;

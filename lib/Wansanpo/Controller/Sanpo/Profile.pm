@@ -11,7 +11,7 @@ sub show {
 
     # ログイン者以外の場合は編集ボタンを表示しない
     my $is_login_user;
-    if ( $self->login_user->id eq $self->stash->{id} ) {
+    if ( $profile_model->is_login_user( $self->login_user->id ) ) {
         $is_login_user = 1;
     }
     $self->stash(

@@ -32,19 +32,17 @@ subtest 'show' => sub {
 
         # ログイン中はユーザーID取得できる
         my $login_user = $t->app->login_user;
-        my $user_id    = $login_user->id;
-        my $profile    = $t->app->test_db->teng->single( 'profile',
-            +{ user_id => $user_id } );
-        my $url = "/sanpo/profile/$user_id";
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile_id = $profile->id;
+        my $url        = "/sanpo/profile/$profile_id";
         $t->get_ok($url)->status_is(200);
 
         # 主な部分のみ
-        my $name = $profile->name;
-        my $id   = $profile->id;
-        $t->content_like(qr{\Q$name\E});
-
         # ボタン確認 編集画面, 検索, メニュー
-        $t->element_exists("a[href=/sanpo/profile/$id/edit]");
+        my $name = $profile->name;
+        $t->content_like(qr{\Q$name\E});
+        $t->element_exists("a[href=/sanpo/profile/$profile_id/edit]");
         $t->element_exists("a[href=/sanpo/profile/search]");
         $t->element_exists("a[href=/sanpo/menu]");
     };
