@@ -72,6 +72,33 @@ subtest 'search' => sub {
     t::Util::logout($t);
 };
 
+subtest 'edit' => sub {
+
+    # ログインをする
+    t::Util::login($t);
+    subtest 'template' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $login_user = $t->app->login_user;
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile_id = $profile->id;
+        my $url        = "/sanpo/profile/$profile_id/edit";
+        $t->get_ok($url)->status_is(200);
+        warn $t->tx->res->body;
+        # 主な部分のみ
+        # ボタン確認 編集画面, 検索, メニュー
+        # my $name = $profile->name;
+        # $t->content_like(qr{\Q$name\E});
+        # $t->element_exists("a[href=/sanpo/profile/$profile_id/edit]");
+        # $t->element_exists("a[href=/sanpo/profile/search]");
+        # $t->element_exists("a[href=/sanpo/menu]");
+    };
+
+    # ログアウトをする
+    t::Util::logout($t);
+};
+
 done_testing();
 
 __END__

@@ -31,7 +31,16 @@ sub show {
 # ユーザー情報編集画面
 sub edit {
     my $self = shift;
-    $self->render( text => 'edit' );
+    $self->stash(
+        class_active => +{
+            wansanpo => 'active',
+            profile  => 'active',
+        },
+        template => 'sanpo/profile/edit',
+        format   => 'html',
+        handler  => 'ep',
+    );
+    $self->render;
     return;
 }
 
