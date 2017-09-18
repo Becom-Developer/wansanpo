@@ -31,16 +31,29 @@ sub show {
 # ユーザー情報編集画面
 sub edit {
     my $self = shift;
+    my $params = +{ id => $self->stash->{id}, };
+
+    my $profile_model = $self->model->sanpo->profile->req_params($params);
+    $self->stash( $profile_model->to_template_edit );
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user;
+    if ( $profile_model->is_login_user( $self->login_user->id ) ) {
+        $is_login_user = 1;
+    }
+    my $template = 'sanpo/profile/edit';
     $self->stash(
+        is_login_user => $is_login_user,
         class_active => +{
             wansanpo => 'active',
             profile  => 'active',
         },
-        template => 'sanpo/profile/edit',
+        template => $template,
         format   => 'html',
         handler  => 'ep',
     );
-    $self->render;
+    my $profile_params = $profile_model->to_template_edit->{profile};
+    $self->render_fillin( $template, $profile_params );
     return;
 }
 

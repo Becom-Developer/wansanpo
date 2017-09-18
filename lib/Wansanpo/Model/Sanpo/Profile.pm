@@ -37,6 +37,18 @@ sub is_login_user {
 
 # テンプレ一覧用値取得
 sub to_template_show {
+    my $self = shift;
+    return $self->_to_template_common;
+}
+
+# テンプレ編集用値取得
+sub to_template_edit {
+    my $self = shift;
+    return $self->_to_template_common;
+}
+
+# テンプレ用値取得共通
+sub _to_template_common {
     my $self       = shift;
     my $profile_id = $self->req_params->{id};
     return if !$profile_id;

@@ -85,14 +85,22 @@ subtest 'edit' => sub {
         my $profile_id = $profile->id;
         my $url        = "/sanpo/profile/$profile_id/edit";
         $t->get_ok($url)->status_is(200);
-        warn $t->tx->res->body;
+
         # 主な部分のみ
-        # ボタン確認 編集画面, 検索, メニュー
-        # my $name = $profile->name;
-        # $t->content_like(qr{\Q$name\E});
-        # $t->element_exists("a[href=/sanpo/profile/$profile_id/edit]");
-        # $t->element_exists("a[href=/sanpo/profile/search]");
-        # $t->element_exists("a[href=/sanpo/menu]");
+        $t->element_exists(
+            "form[method=post][action=/sanpo/profile/$profile_id/update]");
+        $t->element_exists('input[name=name][type=text]');
+        $t->element_exists('input[name=rubi][type=text]');
+        $t->element_exists('input[name=nickname][type=text]');
+        $t->element_exists('input[name=email][type=text]');
+        $t->element_exists('input[name=tel][type=text]');
+        $t->element_exists('input[type=radio][name=gender][value=1]');
+        $t->element_exists('input[type=radio][name=gender][value=2]');
+        $t->element_exists('input[name=birthday][type=text]');
+        $t->element_exists('input[name=zipcode][type=text]');
+        $t->element_exists('input[name=address][type=text]');
+        $t->element_exists('button[type=submit]');
+        $t->element_exists("a[href=/sanpo/profile/$profile_id]");
     };
 
     # ログアウトをする

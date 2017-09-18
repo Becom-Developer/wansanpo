@@ -28,6 +28,9 @@ sanpo/profile - wansanpo ユーザー情報
 ## GET - `/sanpo/profile/:id/edit` - ユーザー情報編集画面
 
 ```
+ユーザー情報一式表示
+編集実行のボタン
+ユーザー情報詳細へのボタン
 ```
 
 ## GET - `/sanpo/profile/search` - ユーザー情報検索(お仲間)

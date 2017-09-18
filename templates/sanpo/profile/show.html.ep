@@ -111,7 +111,7 @@
             <!-- BUTTON BLOCK -->
             <div class="showback">
               <h4><i class="fa fa-angle-right"></i> ユーザー情報の編集をします</h4>
-              <a href="/sanpo/profile/<%= $profile->{id} %>/edit" role="button" type="" class="btn btn-warning btn-lg btn-block">編集画面</a>
+              <a href="/sanpo/profile/<%= $profile->{id} %>/edit" role="button" type="" class="btn btn-success btn-lg btn-block">編集画面</a>
             </div>
             <!--/showback -->
             % }
