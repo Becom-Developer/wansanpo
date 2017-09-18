@@ -21,6 +21,15 @@ sub fetch_profile {
     return $self->handle->single( 'profile', $cond );
 }
 
+# 始めてのログイン
+sub is_first_login {
+    my $self = shift;
+    my $cond = +{ user_id => $self->id, deleted => 0, };
+    my $row  = $self->handle->single( 'profile', $cond );
+    return 1 if !defined $row->name || $row->name eq '';
+    return;
+}
+
 1;
 
 __END__

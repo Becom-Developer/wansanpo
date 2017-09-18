@@ -66,9 +66,12 @@ sub _to_template_common {
     my $pet_rows         = $profile_row->search_pet;
     my $pers_hash_ref    = [ map { $_->get_columns } @{$pet_rows} ];
 
-    my $master = $self->db->master;
-    my $gender = $master->gender->word( $profile_hash_ref->{gender} );
-    $profile_hash_ref->{gender_word} = $gender;
+    # 入力されていない場合もある
+    if ( $profile_hash_ref->{gender} ) {
+        my $master = $self->db->master;
+        $profile_hash_ref->{gender_word}
+            = $master->gender->word( $profile_hash_ref->{gender} );
+    }
 
     return +{
         user    => $user_hash_ref,

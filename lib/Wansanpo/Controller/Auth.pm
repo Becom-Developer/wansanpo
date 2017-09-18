@@ -20,7 +20,7 @@ sub entry {
 
 # ユーザー登録実行
 sub store_entry {
-    my $self = shift;
+    my $self       = shift;
     my $params     = $self->req->params->to_hash;
     my $auth_model = $self->model->auth->req_params($params);
     $self->stash(
@@ -71,10 +71,21 @@ sub check_login {
     );
 
     # DB 存在確認
-    return $self->render if !$auth_model->check;
+    my $login_user = $auth_model->check;
+    return $self->render if !$login_user;
 
     # 認証
     $self->session( user => $params->{login_id} );
+
+    # 始めてのログインはプロフィールへ
+    if ( $login_user->is_first_login ) {
+        my $profile_id = $login_user->fetch_profile->id;
+        $self->flash(
+            msg => 'プロフィールを登録してください' );
+        $self->redirect_to("/sanpo/profile/$profile_id/edit");
+        return;
+    }
+
     $self->flash( msg => 'ユーザーログインしました' );
     $self->redirect_to('/sanpo/menu');
     return;
