@@ -1,49 +1,12 @@
 package Wansanpo::Controller::Sanpo::Profile;
 use Mojo::Base 'Wansanpo::Controller::Sanpo';
 
-# ユーザー情報詳細
-sub show {
-    my $self = shift;
-    my $params = +{ id => $self->stash->{id}, };
+# テンプレ用共通スタッシュ
+sub _template_common {
+    my $self     = shift;
+    my $template = shift;
 
-    my $profile_model = $self->model->sanpo->profile->req_params($params);
-    $self->stash( $profile_model->to_template_show );
-
-    # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user;
-    if ( $profile_model->is_login_user( $self->login_user->id ) ) {
-        $is_login_user = 1;
-    }
-    $self->stash(
-        is_login_user => $is_login_user,
-        class_active  => +{
-            wansanpo => 'active',
-            profile  => 'active',
-        },
-        template => 'sanpo/profile/show',
-        format   => 'html',
-        handler  => 'ep',
-    );
-    $self->render;
-    return;
-}
-
-# ユーザー情報編集画面
-sub edit {
-    my $self = shift;
-    my $params = +{ id => $self->stash->{id}, };
-
-    my $profile_model = $self->model->sanpo->profile->req_params($params);
-    $self->stash( $profile_model->to_template_edit );
-
-    # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user;
-    if ( $profile_model->is_login_user( $self->login_user->id ) ) {
-        $is_login_user = 1;
-    }
-    my $template = 'sanpo/profile/edit';
-    $self->stash(
-        is_login_user => $is_login_user,
+    return +{
         class_active => +{
             wansanpo => 'active',
             profile  => 'active',
@@ -51,9 +14,40 @@ sub edit {
         template => $template,
         format   => 'html',
         handler  => 'ep',
-    );
+    };
+}
+
+# ユーザー情報詳細
+sub show {
+    my $self = shift;
+
+    my $params = +{id => $self->stash->{id},};
+    my $profile_model = $self->model->sanpo->profile->req_params($params);
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user = $profile_model->is_login_user($self->login_user->id);
+    $self->stash($profile_model->to_template_show);
+    $self->stash(is_login_user => $is_login_user);
+    $self->stash($self->_template_common('sanpo/profile/show'));
+    $self->render;
+    return;
+}
+
+# ユーザー情報編集画面
+sub edit {
+    my $self = shift;
+
+    my $params = +{id => $self->stash->{id},};
+    my $profile_model = $self->model->sanpo->profile->req_params($params);
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user = $profile_model->is_login_user($self->login_user->id);
+    my $template = 'sanpo/profile/edit';
+    $self->stash($profile_model->to_template_edit);
+    $self->stash(is_login_user => $is_login_user);
+    $self->stash($self->_template_common($template));
     my $profile_params = $profile_model->to_template_edit->{profile};
-    $self->render_fillin( $template, $profile_params );
+    $self->render_fillin($template, $profile_params);
     return;
 }
 
@@ -63,16 +57,8 @@ sub search {
 
     # 今回は検索機能は実装しない
     my $profile_model = $self->model->sanpo->profile;
-    $self->stash( $profile_model->to_template_search );
-    $self->stash(
-        class_active => +{
-            wansanpo => 'active',
-            profile  => 'active',
-        },
-        template => 'sanpo/profile/search',
-        format   => 'html',
-        handler  => 'ep',
-    );
+    $self->stash($profile_model->to_template_search);
+    $self->stash($self->_template_common('sanpo/profile/search'));
     $self->render;
     return;
 }
@@ -80,14 +66,14 @@ sub search {
 # ユーザー情報更新実行
 sub update {
     my $self = shift;
-    $self->render( text => 'update' );
+    $self->render(text => 'update');
     return;
 }
 
 # ユーザー情報削除(退会)
 sub remove {
     my $self = shift;
-    $self->render( text => 'remove' );
+    $self->render(text => 'remove');
     return;
 }
 
