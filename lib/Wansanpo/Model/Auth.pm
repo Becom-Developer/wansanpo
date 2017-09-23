@@ -29,7 +29,7 @@ sub easy_validate {
     # 二重登録防止
     my $cond = +{
         login_id => $params->{login_id},
-        deleted  => 0,
+        deleted  => $self->db->master->deleted->constant('NOT_DELETED'),
     };
     my $user = $self->db->teng->single( 'user', $cond );
     return if $user;
@@ -39,14 +39,15 @@ sub easy_validate {
 # 登録実行
 sub exec_entry {
     my $self        = shift;
+    my $master      = $self->db->master;
     my $user_params = +{
-        login_id   => $self->req_params->{login_id},
-        password   => $self->req_params->{password},
-        approved   => 1,
-        authority  => 6,
-        deleted    => 0,
-        created_ts => now_datetime(),
-        created_ts => now_datetime(),
+        login_id    => $self->req_params->{login_id},
+        password    => $self->req_params->{password},
+        approved    => $master->approved->constant('APPROVED'),
+        authority   => $master->authority->constant('CUSTOMER'),
+        deleted     => $master->deleted->constant('NOT_DELETED'),
+        created_ts  => now_datetime(),
+        modified_ts => now_datetime(),
     };
 
     my $txn = $self->db->teng->txn_scope;
@@ -73,7 +74,7 @@ sub check {
     my $cond   = +{
         login_id => $params->{login_id},
         password => $params->{password},
-        deleted  => 0,
+        deleted  => $self->db->master->deleted->constant('NOT_DELETED'),
     };
     my $user = $self->db->teng->single( 'user', $cond );
     return $user if $user;
@@ -86,7 +87,7 @@ sub session_check {
     my $params = $self->req_params;
     my $cond   = +{
         login_id => $params->{login_id},
-        deleted  => 0,
+        deleted  => $self->db->master->deleted->constant('NOT_DELETED'),
     };
     my $user = $self->db->teng->single( 'user', $cond );
     return $user if $user;

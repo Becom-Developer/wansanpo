@@ -10,6 +10,24 @@ sub welcome {
     return 'welcome Wansanpo::DB::Master!!';
 }
 
+# approved 承認
+sub approved {
+    my $self = shift;
+    my $hash = +{
+        0 => '承認していない',
+        1 => '承認済み',
+    };
+
+    my $constant = +{
+        NOT_APPROVED => 0,
+        APPROVED     => 1,
+    };
+
+    $self->master_hash($hash);
+    $self->master_constant_hash($constant);
+    return $self;
+}
+
 # authority 権限
 sub authority {
     my $self = shift;
