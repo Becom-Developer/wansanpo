@@ -83,28 +83,93 @@ subtest 'edit' => sub {
         my $cond       = +{ user_id => $login_user->id };
         my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
         my $profile_id = $profile->id;
-        my $url        = "/sanpo/profile/$profile_id/edit";
-        $t->get_ok($url)->status_is(200);
 
-        # 主な部分のみ
-        $t->element_exists(
-            "form[method=post][action=/sanpo/profile/$profile_id/update]");
-        $t->element_exists('input[name=name][type=text]');
-        $t->element_exists('input[name=rubi][type=text]');
-        $t->element_exists('input[name=nickname][type=text]');
-        $t->element_exists('input[name=email][type=text]');
-        $t->element_exists('input[name=tel][type=text]');
-        $t->element_exists('input[type=radio][name=gender][value=1]');
-        $t->element_exists('input[type=radio][name=gender][value=2]');
-        $t->element_exists('input[name=birthday][type=text]');
-        $t->element_exists('input[name=zipcode][type=text]');
-        $t->element_exists('input[name=address][type=text]');
-        $t->element_exists('button[type=submit]');
-        $t->element_exists("a[href=/sanpo/profile/$profile_id]");
+        my $edit_url   = "/sanpo/profile/$profile_id/edit";
+        my $update_url = "/sanpo/profile/$profile_id/update";
+        my $show_url   = "/sanpo/profile/$profile_id";
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+
+        # form
+        my $form = "form[name=form_update][method=post][action=$update_url]";
+        $t->element_exists($form);
+
+        # input text
+        my $text_names
+            = [qw{name rubi nickname email tel birthday zipcode address}];
+        for my $name ( @{$text_names} ) {
+            $t->element_exists("$form input[name=$name][type=text]");
+        }
+
+        # input radio
+        $t->element_exists("$form input[name=gender][type=radio][value=1]");
+        $t->element_exists("$form input[name=gender][type=radio][value=2]");
+
+        # 他 button, link
+        $t->element_exists("$form button[type=submit]");
+        $t->element_exists("a[href=$show_url]");
+
     };
 
     # ログアウトをする
     t::Util::logout($t);
+};
+
+# ユーザー情報更新実行
+subtest 'update' => sub {
+
+    t::Util::login($t);
+    subtest 'fail' => sub {
+        ok(1);
+    };
+
+    subtest 'success' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $login_user = $t->app->login_user;
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile_id = $profile->id;
+        my $edit_url   = "/sanpo/profile/$profile_id/edit";
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = 'form[name=form_update]';
+        my $update_url = $dom->at($form)->attr('action');
+
+        # input text 取得
+        my $params = +{};
+        for my $e ( $dom->find("$form input[type=text]")->each ) {
+            my $name = $e->attr('name');
+            next if !$name;
+            $params->{$name} = $e->val;
+        }
+
+        # input radio 取得
+        for my $e ( $dom->find("$form input[type=radio]")->each ) {
+            my $name = $e->attr('name');
+            next if !$name;
+            my $tag = $e->to_string;
+            if ( $tag =~ /checked/ ) {
+                $params->{$name} = $e->val;
+            }
+        }
+
+        # 更新実行
+        $t->post_ok( $update_url => form => $params )->status_is('200');
+    };
+
+    t::Util::logout($t);
+
+    ok(1);
+};
+
+# ユーザー情報削除(退会)
+subtest 'remove' => sub {
+    ok(1);
 };
 
 done_testing();

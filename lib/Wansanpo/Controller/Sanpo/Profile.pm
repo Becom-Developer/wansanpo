@@ -66,6 +66,7 @@ sub search {
 # ユーザー情報更新実行
 sub update {
     my $self = shift;
+    my $params = $self->req->params->to_hash;
     $self->render(text => 'update');
     return;
 }

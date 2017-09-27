@@ -29,7 +29,7 @@
         <div class="col-lg-12">
           <div class="form-panel">
             <h4 class="mb"><i class="fa fa-angle-right"></i> ユーザープロフィール</h4>
-            <form class="form-horizontal style-form" method="post" action="/sanpo/profile/<%= $profile->{id} %>/update">
+            <form class="form-horizontal style-form" name="form_update" method="post" action="/sanpo/profile/<%= $profile->{id} %>/update">
               <div class="form-group">
                 <%# アイコン画像 %>
                   <label class="col-lg-2 col-sm-2 control-label"></label>
