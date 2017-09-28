@@ -70,6 +70,51 @@ sub logout {
     return;
 }
 
+# input 入力フォームの値を取得
+sub get_input_val {
+    my $dom  = shift;
+    my $form = shift;
+
+    # input text 取得
+    my $text_params = _get_input_text_val( $dom, $form );
+
+    # input radio 取得
+    my $radio_params = _get_input_radio_val( $dom, $form );
+    my $params = +{ %{$text_params}, %{$radio_params}, };
+    return $params;
+}
+
+# input text 入力フォームの値を取得
+sub _get_input_text_val {
+    my $dom  = shift;
+    my $form = shift;
+
+    my $params = +{};
+    for my $e ( $dom->find("$form input[type=text]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        $params->{$name} = $e->val;
+    }
+    return $params;
+}
+
+# input radio 入力フォームの値を取得
+sub _get_input_radio_val {
+    my $dom  = shift;
+    my $form = shift;
+
+    my $params = +{};
+    for my $e ( $dom->find("$form input[type=radio]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        my $tag = $e->to_string;
+        if ( $tag =~ /checked/ ) {
+            $params->{$name} = $e->val;
+        }
+    }
+    return $params;
+}
+
 1;
 
 __END__

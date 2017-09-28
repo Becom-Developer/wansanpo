@@ -121,15 +121,12 @@ subtest 'update' => sub {
 
     t::Util::login($t);
     subtest 'fail' => sub {
-        ok(1);
-    };
-
-    subtest 'success' => sub {
 
         # ログイン中はユーザーID取得できる
         my $login_user = $t->app->login_user;
+        my $teng       = $t->app->test_db->teng;
         my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile    = $teng->single( 'profile', $cond );
         my $profile_id = $profile->id;
         my $edit_url   = "/sanpo/profile/$profile_id/edit";
 
@@ -140,26 +137,62 @@ subtest 'update' => sub {
         my $form       = 'form[name=form_update]';
         my $update_url = $dom->at($form)->attr('action');
 
-        # input text 取得
-        my $params = +{};
-        for my $e ( $dom->find("$form input[type=text]")->each ) {
-            my $name = $e->attr('name');
-            next if !$name;
-            $params->{$name} = $e->val;
-        }
+        # input val 取得
+        my $params = t::Util::get_input_val( $dom, $form );
 
-        # input radio 取得
-        for my $e ( $dom->find("$form input[type=radio]")->each ) {
-            my $name = $e->attr('name');
-            next if !$name;
-            my $tag = $e->to_string;
-            if ( $tag =~ /checked/ ) {
-                $params->{$name} = $e->val;
-            }
-        }
+        # 名前 (必須項目)
+        my $name_org  = $params->{name};
+        my $test_name = '';
+        $params->{name} = $test_name;
 
         # 更新実行
-        $t->post_ok( $update_url => form => $params )->status_is('200');
+        $t->post_ok( $update_url => form => $params )->status_is(200);
+
+        # 画面確認
+        $t->text_like( 'html head title', qr{\Qwansanpo/profile/edit\E}, );
+        $t->content_like(qr{\Q<b>更新できません</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'profile', +{ id => $profile_id } );
+        is( $row->name, $name_org, 'name' );
+    };
+
+    subtest 'success' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $login_user = $t->app->login_user;
+        my $teng       = $t->app->test_db->teng;
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $teng->single( 'profile', $cond );
+        my $profile_id = $profile->id;
+        my $edit_url   = "/sanpo/profile/$profile_id/edit";
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = 'form[name=form_update]';
+        my $update_url = $dom->at($form)->attr('action');
+
+        # input val 取得
+        my $params = t::Util::get_input_val( $dom, $form );
+
+        # 名前更新
+        my $test_name = 'sample_name';
+        $params->{name} = $test_name;
+
+        # 更新実行
+        $t->post_ok( $update_url => form => $params )->status_is(302);
+
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/profile/show\E}, );
+        $t->content_like(qr{\Q<b>ユーザー更新完了しました</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'profile', +{ id => $profile_id } );
+        is( $row->name, $test_name, 'name' );
     };
 
     t::Util::logout($t);

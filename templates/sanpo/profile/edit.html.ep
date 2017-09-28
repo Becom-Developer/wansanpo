@@ -21,6 +21,9 @@
           <p>ユーザー情報編集</p>
         </div>
       </div>
+      % if ( my $stash_msg = stash('msg') ) {
+      <div class="alert alert-success"><b><%== $stash_msg =%></b></div>
+      % }
       % if ( my $msg = flash('msg') ) {
       <div class="alert alert-success"><b><%== $msg %></b></div>
       % }

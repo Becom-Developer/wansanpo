@@ -1,6 +1,7 @@
 package Wansanpo::Model::Sanpo::Profile;
 use Mojo::Base 'Wansanpo::Model::Base';
 use Mojo::Util qw{dumper};
+use Wansanpo::Util qw{now_datetime};
 
 =encoding utf8
 
@@ -16,6 +17,29 @@ has [qw{}];
 sub welcome {
     my $self = shift;
     return 'welcome Wansanpo::Model::Sanpo::Profile!!';
+}
+
+# 簡易バリデート
+sub easy_validate {
+    my $self   = shift;
+    my $params = $self->req_params;
+    return if !$params->{id};
+    return if !$params->{name};
+    return if !$params->{email};
+    return 1;
+}
+
+# 更新実行
+sub update_profile {
+    my $self       = shift;
+    my $master     = $self->db->master;
+    my $profile_id = $self->req_params->{id};
+    my $profile_params
+        = +{ %{ $self->req_params }, modified_ts => now_datetime(), };
+    delete $profile_params->{id};
+    my $row = $self->db->teng->single( 'profile', +{ id => $profile_id } );
+    $row->update($profile_params);
+    return;
 }
 
 # ログイン者であることの確認
