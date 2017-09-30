@@ -19,6 +19,8 @@ subtest 'router' => sub {
     $t->get_ok('/auth/login')->status_is(200);
     $t->post_ok('/auth/login')->status_is(200);
     $t->post_ok('/auth/logout')->status_is(200);
+    $t->get_ok('/auth/1/edit')->status_is(200);
+    $t->post_ok('/auth/1/update')->status_is(200);
 
     # 必ず戻す
     $t->ua->max_redirects(0);
@@ -125,6 +127,21 @@ subtest '/auth/login' => sub {
         $t->post_ok( $url => form => $params )->status_is(200);
         $t->content_like(qr{\Q<b>ユーザーが存在しません</b>\E});
     };
+};
+
+# ログアウト実行
+subtest 'post /auth/logout' => sub {
+    ok(1);
+};
+
+# パスワード変更画面
+subtest 'get auth/:id/edit' => sub {
+    ok(1);
+};
+
+# パスワード変更実行
+subtest 'post /auth/:id/update' => sub {
+    ok(1);
 };
 
 done_testing();

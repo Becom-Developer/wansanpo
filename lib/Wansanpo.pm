@@ -71,11 +71,13 @@ sub startup {
     $r->get('/info/intro')->to('Info#intro');
 
     # 認証関連
-    $r->get('/auth/entry')->to('Auth#entry');
-    $r->post('/auth/entry')->to('Auth#store_entry');
+    $r->get('/auth/entry')->to('Auth#create');
+    $r->post('/auth/entry')->to('Auth#store');
     $r->get('/auth/login')->to('Auth#login');
-    $r->post('/auth/login')->to('Auth#check_login');
+    $r->post('/auth/login')->to('Auth#check');
     $r->post('/auth/logout')->to('Auth#logout');
+    $r->get('/auth/:id/edit')->to('Auth#edit');
+    $r->post('/auth/:id/update')->to('Auth#update');
 
     # 認証保護されたページ
     # アプリメニュー

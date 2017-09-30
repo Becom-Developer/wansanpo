@@ -19,7 +19,7 @@ sub _template_common {
 }
 
 # ユーザ登録画面
-sub entry {
+sub create {
     my $self = shift;
     $self->stash($self->_template_common('auth/entry'));
     $self->render;
@@ -27,7 +27,7 @@ sub entry {
 }
 
 # ユーザー登録実行
-sub store_entry {
+sub store {
     my $self       = shift;
     my $params     = $self->req->params->to_hash;
     my $auth_model = $self->model->auth->req_params($params);
@@ -58,7 +58,7 @@ sub login {
 }
 
 # ログイン確認実行
-sub check_login {
+sub check {
     my $self       = shift;
     my $params     = $self->req->params->to_hash;
     my $auth_model = $self->model->auth->req_params($params);
@@ -102,6 +102,20 @@ sub logout {
     my $self = shift;
     $self->session(expires => 1);
     $self->redirect_to('/info/intro');
+    return;
+}
+
+# パスワード変更画面
+sub edit {
+    my $self = shift;
+    $self->render(text => 'edit');
+    return;
+}
+
+# パスワード変更実行
+sub update {
+    my $self = shift;
+    $self->render(text => 'update');
     return;
 }
 

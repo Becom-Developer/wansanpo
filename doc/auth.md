@@ -6,15 +6,17 @@
 
 ## URL
 
-- GET - `/auth/entry` - ユーザー登録画面
-- POST - `/auth/entry` - ユーザー登録実行
-- GET - `/auth/login` - ログイン画面
-- POST - `/auth/login` - ログイン実行
-- POST - `/auth/logout` - ログアウト実行
+- GET - `/auth/entry` - create - ユーザー登録画面
+- POST - `/auth/entry` - store - ユーザー登録実行
+- GET - `/auth/login` - login - ログイン画面
+- POST - `/auth/login` - check - ログイン実行
+- POST - `/auth/logout` - logout - ログアウト実行
+- GET - `/auth/:id/edit` - edit - パスワード変更画面
+- POST - `/auth/:id/update` - update - パスワード変更実行
 
 # DESCRIPTION
 
-## GET - `/auth/entry` - ユーザー登録画面
+## GET - `/auth/entry` - create - ユーザー登録画面
 
 ```
 入力フォーム
@@ -24,7 +26,7 @@ TODO
     バリデートルールを明確にする
 ```
 
-## POST - `/auth/entry` - ユーザー登録実行
+## POST - `/auth/entry` - store - ユーザー登録実行
 
 ```
 登録失敗
@@ -40,7 +42,7 @@ TODO
     送信メールにユニークなURLを記載、リンクアクセスによる承認
 ```
 
-## GET - `/auth/login` - ログイン画面
+## GET - `/auth/login` - login - ログイン画面
 
 ```
 入力フォーム
@@ -51,7 +53,7 @@ TODO
     パスワード忘れの人のためのメールにパスワード送る機能
 ```
 
-## POST - `/auth/login` - ログイン実行
+## POST - `/auth/login` - check - ログイン実行
 
 ```
 ログイン失敗
@@ -63,7 +65,7 @@ TODO
 TODO
 ```
 
-## POST - `/auth/logout` - ログアウト実行
+## POST - `/auth/logout` - logout - ログアウト実行
 
 ```
 ログアウト実行ボタン
@@ -71,6 +73,23 @@ TODO
 ログアウト成功
     成功メッセージ出力後、アプリ紹介画面へ遷移
 TODO
+```
+
+## POST - `/auth/:id/edit` - edit - パスワード変更画面
+
+```
+TODO
+    変更画面実装
+    変更画面にはログイン中でログインしている人の情報だけ表示
+    変更するには現在のパスワードの入力を求める
+```
+
+## GET - `/auth/:id/update` - update - パスワード変更実行
+
+```
+TODO
+    空文字やスペース、タブ文字だけなどありえない文字は登録不可
+    ログイン中の自分自身のパスワードしか更新できない
 ```
 
 # SEE ALSO

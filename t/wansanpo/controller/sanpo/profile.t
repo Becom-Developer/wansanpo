@@ -196,8 +196,6 @@ subtest 'update' => sub {
     };
 
     t::Util::logout($t);
-
-    ok(1);
 };
 
 # ユーザー情報削除(退会)
