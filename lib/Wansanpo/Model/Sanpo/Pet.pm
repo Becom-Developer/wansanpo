@@ -114,6 +114,30 @@ sub to_template_search {
     return +{ pets => $pets, };
 }
 
+# テンプレ一覧用値取得
+sub to_template_create {
+    my $self   = shift;
+
+    my $user_id = $self->req_params->{user_id};
+    return if !$user_id;
+
+    my $cond = +{
+        id      => $user_id,
+        deleted => 0,
+    };
+    my $user_row = $self->db->teng->single( 'user', $cond );
+    return if !$user_row;
+
+    # ログインID
+    my $user_hash_ref    = $user_row->get_columns;
+    my $profile_hash_ref = $user_row->fetch_profile->get_columns;
+
+    return +{
+        user    => $user_hash_ref,
+        profile => $profile_hash_ref,
+    };
+}
+
 1;
 
 __END__

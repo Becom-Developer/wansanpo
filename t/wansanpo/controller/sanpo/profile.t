@@ -43,6 +43,7 @@ subtest 'show' => sub {
         my $name = $profile->name;
         $t->content_like(qr{\Q$name\E});
         $t->element_exists("a[href=/sanpo/profile/$profile_id/edit]");
+        $t->element_exists("a[href=/sanpo/pet/create]");
         $t->element_exists("a[href=/sanpo/profile/search]");
         $t->element_exists("a[href=/sanpo/menu]");
     };

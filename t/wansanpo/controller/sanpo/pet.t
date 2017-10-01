@@ -26,7 +26,8 @@ subtest 'router' => sub {
     $t->ua->max_redirects(0);
 };
 
-subtest 'show' => sub {
+# ペット情報詳細
+subtest 'get /sanpo/pet/:id show' => sub {
 
     # ログインをする
     t::Util::login($t);
@@ -55,7 +56,67 @@ subtest 'show' => sub {
     t::Util::logout($t);
 };
 
-subtest 'search' => sub {
+# ペット情報編集画面
+subtest 'get /sanpo/pet/:id/edit edit' => sub {
+    ok(1);
+};
+
+# ペット情報新規登録画面
+subtest 'get /sanpo/pet/create create' => sub {
+    t::Util::login($t);
+
+    # 入力画面
+    subtest 'template' => sub {
+        my $login_user = $t->app->login_user;
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile_id = $profile->id;
+
+        my $create_url  = '/sanpo/pet/create';
+        my $name        = 'form_create';
+        my $action      = '/sanpo/pet';
+        my $profile_url = "/sanpo/profile/$profile_id";
+        my $menu_url    = '/sanpo/menu';
+
+        # ユーザー情報詳細画面
+        $t->get_ok($profile_url)->status_is(200);
+        $t->element_exists("a[href=$create_url]");
+
+        # 入力画面
+        $t->get_ok($create_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/create\E}, );
+
+        # form
+        my $form = "form[name=$name][method=post][action=$action]";
+        $t->element_exists($form);
+
+        # input text
+        my $text_names = [qw{type name birthday note}];
+        for my $name ( @{$text_names} ) {
+            $t->element_exists("$form input[name=$name][type=text]");
+        }
+
+        # input radio
+        $t->element_exists("$form input[name=gender][type=radio][value=1]");
+        $t->element_exists("$form input[name=gender][type=radio][value=2]");
+
+        # 他 button, link
+        $t->element_exists("$form button[type=submit]");
+        $t->element_exists("a[href=$profile_url]");
+        $t->element_exists("a[href=$menu_url]");
+    };
+
+    t::Util::logout($t);
+    ok(1);
+};
+
+# ペット情報新規登録実行
+subtest 'post /sanpo/pet store' => sub {
+    ok(1);
+};
+
+# ペット情報検索
+subtest 'get /sanpo/pet/search search' => sub {
 
     # ログインをする
     t::Util::login($t);
@@ -74,6 +135,16 @@ subtest 'search' => sub {
 
     # ログアウトをする
     t::Util::logout($t);
+};
+
+# ペット情報更新実行
+subtest 'post /sanpo/pet/:id/update update' => sub {
+    ok(1);
+};
+
+# ペット情報削除
+subtest 'post /sanpo/pet/:id/remove remove' => sub {
+    ok(1);
 };
 
 done_testing();
