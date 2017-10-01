@@ -37,31 +37,28 @@ sub easy_validate {
 }
 
 # 登録実行
-sub exec_entry {
-    my $self        = shift;
-    my $master      = $self->db->master;
+sub store {
+    my $self   = shift;
+    my $master = $self->db->master;
+
     my $user_params = +{
-        login_id    => $self->req_params->{login_id},
-        password    => $self->req_params->{password},
-        approved    => $master->approved->constant('APPROVED'),
-        authority   => $master->authority->constant('CUSTOMER'),
-        deleted     => $master->deleted->constant('NOT_DELETED'),
-        created_ts  => now_datetime(),
-        modified_ts => now_datetime(),
+        login_id  => $self->req_params->{login_id},
+        password  => $self->req_params->{password},
+        approved  => $master->approved->constant('APPROVED'),
+        authority => $master->authority->constant('CUSTOMER'),
+        deleted   => $master->deleted->constant('NOT_DELETED'),
     };
 
     my $txn = $self->db->teng->txn_scope;
 
-    my $user_id = $self->db->teng->fast_insert( 'user', $user_params );
+    my $user_id = $self->db->teng_fast_insert( 'user', $user_params );
+
     my $profile_params = +{
-        user_id     => $user_id,
-        email       => $self->req_params->{login_id},
-        deleted     => 0,
-        created_ts  => now_datetime(),
-        modified_ts => now_datetime(),
+        user_id => $user_id,
+        email   => $self->req_params->{login_id},
+        deleted => 0,
     };
-    my $profile_id
-        = $self->db->teng->fast_insert( 'profile', $profile_params );
+    my $profile_id = $self->db->teng_fast_insert( 'profile', $profile_params );
 
     $txn->commit;
     return;

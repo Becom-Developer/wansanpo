@@ -38,7 +38,7 @@ sub store {
     return $self->render if !$auth_model->easy_validate;
 
     # 登録実行
-    $auth_model->exec_entry;
+    $auth_model->store;
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash(msg => 'ユーザー登録完了しました');

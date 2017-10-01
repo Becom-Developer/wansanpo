@@ -28,7 +28,7 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
-      <form class="form-login" method="post" action="/auth/login">
+      <form class="form-login" name="form_login" method="post" action="/auth/login">
         <h2 class="form-login-heading">sign in now</h2>
         <div class="login-wrap">
           % if ( my $stash_msg = stash('msg') ) {
@@ -39,7 +39,7 @@
           % }
           <input name="login_id" type="text" class="form-control" placeholder="ID (Email)" autofocus>
           <br>
-          <input name="password" type="" class="form-control" placeholder="Password">
+          <input name="password" type="text" class="form-control" placeholder="Password">
           <label class="checkbox">
             <span class="pull-right"><a data-toggle="modal" href=""></a></span>
           </label>

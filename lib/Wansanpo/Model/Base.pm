@@ -12,7 +12,7 @@ Wansanpo::Model::Base - コントローラーモデル (共通)
 
 =cut
 
-has [qw{conf req_params} ];
+has [qw{conf req_params}];
 
 has db => sub {
     Wansanpo::DB->new( +{ conf => shift->conf } );

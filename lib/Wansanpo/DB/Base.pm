@@ -1,5 +1,6 @@
 package Wansanpo::DB::Base;
 use Mojo::Base -base;
+use Wansanpo::Util qw{now_datetime};
 use Teng;
 use Teng::Schema::Loader;
 Teng->load_plugin('Pager');
@@ -34,6 +35,20 @@ sub teng {
         namespace => 'Wansanpo::DB::Teng',
     );
     return $teng;
+}
+
+# teng fast insert 日付つき
+sub teng_fast_insert {
+    my $self   = shift;
+    my $table  = shift;
+    my $params = shift;
+
+    $params = +{
+        %{$params},
+        created_ts  => now_datetime(),
+        modified_ts => now_datetime(),
+    };
+    return $self->teng->fast_insert( $table, $params );
 }
 
 1;
