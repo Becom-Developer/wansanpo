@@ -51,6 +51,17 @@ sub teng_fast_insert {
     return $self->teng->fast_insert( $table, $params );
 }
 
+# teng update 日付つき
+sub teng_update {
+    my $self   = shift;
+    my $table  = shift;
+    my $params = shift;
+    my $cond   = shift;
+
+    $params = +{ %{$params}, modified_ts => now_datetime(), };
+    return $self->teng->update( $table, $params, $cond, );
+}
+
 1;
 
 __END__

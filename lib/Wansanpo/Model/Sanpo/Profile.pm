@@ -30,15 +30,13 @@ sub easy_validate {
 }
 
 # 更新実行
-sub update_profile {
+sub update {
     my $self       = shift;
-    my $master     = $self->db->master;
     my $profile_id = $self->req_params->{id};
-    my $profile_params
-        = +{ %{ $self->req_params }, modified_ts => now_datetime(), };
-    delete $profile_params->{id};
-    my $row = $self->db->teng->single( 'profile', +{ id => $profile_id } );
-    $row->update($profile_params);
+    my $params     = +{ %{ $self->req_params }, };
+    delete $params->{id};
+    my $cond = +{ id => $profile_id };
+    $self->db->teng_update( 'profile', $params, $cond );
     return;
 }
 

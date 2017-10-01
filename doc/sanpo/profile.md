@@ -45,15 +45,17 @@ sanpo/profile - wansanpo ユーザー情報
 ## POST - `/sanpo/profile/:id/update` - ユーザー情報更新実行
 
 ```
+ユーザー情報を更新
+TODO
+    アイコン画像の更新は別のアクションにする
 ```
 
 ## POST - `/sanpo/profile/:id/remove` - ユーザー情報削除(退会)
 
 ```
+TODO
+    ユーザー情報と紐づくデータを論理削除
+    削除はユーザー本人もしくは管理権限が admin 以上のユーザー
 ```
-
-
-
-
 
 # SEE ALSO

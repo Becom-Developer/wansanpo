@@ -87,7 +87,7 @@ sub update {
         if !$profile_model->easy_validate;
 
     # 登録実行
-    $profile_model->update_profile;
+    $profile_model->update;
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'ユーザー更新完了しました' );
