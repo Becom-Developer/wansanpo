@@ -84,6 +84,20 @@ sub get_input_val {
     return $params;
 }
 
+# dom に値を埋め込み
+sub input_val_in_dom {
+    my $dom  = shift;
+    my $form = shift;
+    my $data = shift;
+
+    # input text
+    $dom = t::Util::_text_val_in_dom( $dom, $form, $data );
+
+    # input radio
+    $dom = t::Util::_radio_val_in_dom( $dom, $form, $data );
+    return $dom;
+}
+
 # input text 入力フォームの値を取得
 sub _get_input_text_val {
     my $dom  = shift;
@@ -114,6 +128,75 @@ sub _get_input_radio_val {
     }
     return $params;
 }
+
+# input text の name を全て取得
+sub _get_input_text_names {
+    my $dom  = shift;
+    my $form = shift;
+
+    my $names;
+    for my $e ( $dom->find("$form input[type=text]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        push @{$names}, $name;
+    }
+    return $names;
+}
+
+# input radio の name を全て取得
+sub _get_input_radio_names {
+    my $dom  = shift;
+    my $form = shift;
+
+    my $names;
+    for my $e ( $dom->find("$form input[type=radio]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        my $tag = $e->to_string;
+        if ( $tag =~ /checked/ ) {
+            push @{$names}, $name;
+        }
+    }
+    return $names;
+}
+
+# input text 値の埋め込み
+sub _text_val_in_dom {
+    my $dom  = shift;
+    my $form = shift;
+    my $data = shift;
+
+    my $names = t::Util::_get_input_text_names( $dom, $form );
+    for my $name ( @{$names} ) {
+        my $val = $data->{$name};
+        $dom->at("$form input[name=$name]")->attr( +{ value => $val } );
+    }
+    return $dom;
+}
+
+# input radio 値の埋め込み
+sub _radio_val_in_dom {
+    my $dom  = shift;
+    my $form = shift;
+    my $data = shift;
+
+    my $names = t::Util::_get_input_radio_names( $dom, $form );
+
+    # checked をはずす
+    for my $e ( $dom->find("$form input[type=radio][checked]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        delete $e->attr->{checked};
+    }
+
+    for my $name ( @{$names} ) {
+        my $val = $data->{$name};
+        $dom->at("$form input[name=$name][value=$val]")
+            ->attr( 'checked' => undef );
+    }
+    return $dom;
+}
+
 
 1;
 

@@ -112,6 +112,57 @@ subtest 'get /sanpo/pet/create create' => sub {
 
 # ペット情報新規登録実行
 subtest 'post /sanpo/pet store' => sub {
+    t::Util::login($t);
+    subtest 'success' => sub {
+        my $login_user = $t->app->login_user;
+        my $cond       = +{ user_id => $login_user->id };
+        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $create_url = '/sanpo/pet/create';
+        my $name       = 'form_create';
+        my $action     = '/sanpo/pet';
+
+        # 入力画面
+        $t->get_ok($create_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/create\E}, );
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = "form[name=$name][method=post][action=$action]";
+        my $action_url = $dom->at($form)->attr('action');
+
+        # 入力データーの元
+        my $pets     = $profile->search_pet;
+        my $pet      = shift @{$pets};
+        my $pet_hash = $pet->get_columns;
+
+        # test_pet メス
+        $pet_hash->{name}   = 'test_pet';
+        $pet_hash->{gender} = 2;
+
+        # dom に 値を埋め込み
+        $dom = t::Util::input_val_in_dom( $dom, $form, $pet_hash );
+
+        # input val 取得
+        my $params = t::Util::get_input_val( $dom, $form );
+
+        # 実行
+        $t->post_ok( $action_url => form => $params )->status_is(200);
+
+        # # 画面確認
+        # $t->text_like( 'html head title', qr{\Qwansanpo/profile/store\E}, );
+        # $t->content_like(qr{\Q<b>登録完了しました</b>\E});
+
+        # # db 確認
+        # my $row = $teng->single( 'profile', +{ id => $profile_id } );
+        # is( $row->name, $name_org, 'name' );
+        ok(1);
+    };
+
+    subtest 'fail' => sub {
+        ok(1);
+    };
+
+    t::Util::logout($t);
+
     ok(1);
 };
 
