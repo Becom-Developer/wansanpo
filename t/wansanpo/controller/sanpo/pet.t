@@ -98,15 +98,58 @@ subtest 'get /sanpo/pet/create create' => sub {
         $t->element_exists("a[href=$profile_url]");
         $t->element_exists("a[href=$menu_url]");
     };
-
     $test_util->logout($t);
-    ok(1);
 };
 
 # ペット情報新規登録実行
 subtest 'post /sanpo/pet store' => sub {
     $test_util->login($t);
+
+    subtest 'fail' => sub {
+        my $teng       = $t->app->test_db->teng;
+        my $pet_rows   = $t->app->login_user->search_pet;
+        my $create_url = '/sanpo/pet/create';
+        my $name       = 'form_create';
+        my $action     = '/sanpo/pet';
+
+        # 入力画面
+        $t->get_ok($create_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/create\E}, );
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = "form[name=$name][method=post][action=$action]";
+        my $action_url = $dom->at($form)->attr('action');
+
+        # 入力データーの元
+        my $pet      = shift @{$pet_rows};
+        my $pet_hash = $pet->get_columns;
+
+        # 名前なし
+        # 名前 (必須項目)
+        my $name_org  = $pet_hash->{name};
+        my $test_name = '';
+        $pet_hash->{name} = $test_name;
+
+        # dom に 値を埋め込み
+        $dom = $test_util->input_val_in_dom( $dom, $form, $pet_hash );
+
+        # input val 取得
+        my $params = $test_util->get_input_val( $dom, $form );
+
+        # 実行
+        $t->post_ok( $action_url => form => $params )->status_is(200);
+
+        # 画面確認
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/create\E}, );
+        $t->content_like(qr{\Q<b>登録できません</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'pet', +{ name => $name_org } );
+        is( $row->gender, $pet_hash->{gender}, 'gender' );
+    };
+
     subtest 'success' => sub {
+        my $teng       = $t->app->test_db->teng;
         my $pet_rows   = $t->app->login_user->search_pet;
         my $create_url = '/sanpo/pet/create';
         my $name       = 'form_create';
@@ -135,25 +178,19 @@ subtest 'post /sanpo/pet store' => sub {
         my $params = $test_util->get_input_val( $dom, $form );
 
         # 実行
-        $t->post_ok( $action_url => form => $params )->status_is(200);
+        $t->post_ok( $action_url => form => $params )->status_is(302);
 
-        # # 画面確認
-        # $t->text_like( 'html head title', qr{\Qwansanpo/profile/store\E}, );
-        # $t->content_like(qr{\Q<b>登録完了しました</b>\E});
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/show\E}, );
+        $t->content_like(qr{\Q<b>登録完了しました</b>\E});
 
-        # # db 確認
-        # my $row = $teng->single( 'profile', +{ id => $profile_id } );
-        # is( $row->name, $name_org, 'name' );
-        ok(1);
+        # db 確認
+        my $row = $teng->single( 'pet', +{ name => $pet_hash->{name} } );
+        is( $row->gender, $pet_hash->{gender}, 'gender' );
     };
-
-    subtest 'fail' => sub {
-        ok(1);
-    };
-
     $test_util->logout($t);
-
-    ok(1);
 };
 
 # ペット情報検索

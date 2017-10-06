@@ -18,6 +18,16 @@ sub welcome {
     return 'welcome Wansanpo::Model::Sanpo::pet!!';
 }
 
+# 簡易バリデート
+sub easy_validate {
+    my $self   = shift;
+    my $params = $self->req_params;
+    return if !$params->{type};
+    return if !$params->{name};
+    return if !$params->{gender};
+    return 1;
+}
+
 # ログイン者であることの確認
 sub is_login_user {
     my $self    = shift;
@@ -33,6 +43,23 @@ sub is_login_user {
     my $pet_row = $self->db->teng->single( 'pet', $cond );
     return if !$pet_row;
     return 1;
+}
+
+# 登録実行
+sub store {
+    my $self   = shift;
+    my $master = $self->db->master;
+    my $params = +{
+        user_id  => $self->req_params->{user_id},
+        type     => $self->req_params->{type},
+        name     => $self->req_params->{name},
+        gender   => $self->req_params->{gender},
+        icon     => '',
+        birthday => $self->req_params->{birthday},
+        note     => $self->req_params->{note},
+        deleted  => $master->deleted->constant('NOT_DELETED'),
+    };
+    return $self->db->teng_fast_insert( 'pet', $params );
 }
 
 # テンプレ一覧用値取得
@@ -114,9 +141,9 @@ sub to_template_search {
     return +{ pets => $pets, };
 }
 
-# テンプレ一覧用値取得
+# テンプレ新規登録
 sub to_template_create {
-    my $self   = shift;
+    my $self = shift;
 
     my $user_id = $self->req_params->{user_id};
     return if !$user_id;

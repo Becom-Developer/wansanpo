@@ -5,12 +5,13 @@ use Mojo::Base 'Wansanpo::Controller::Sanpo';
 sub _template_common {
     my $self     = shift;
     my $template = shift;
-
+    my $msg      = shift;
     return +{
         class_active => +{
             wansanpo => 'active',
             pet      => 'active',
         },
+        msg      => $msg,
         template => $template,
         format   => 'html',
         handler  => 'ep',
@@ -54,7 +55,28 @@ sub create {
 # ペット情報新規登録実行
 sub store {
     my $self = shift;
-    $self->render( text => 'store' );
+
+    my $params = +{
+        user_id => $self->login_user->id,
+        %{ $self->req->params->to_hash },
+    };
+
+    my $model    = $self->model->sanpo->pet->req_params($params);
+    my $msg      = '登録できません';
+    my $template = 'sanpo/pet/create';
+    $self->stash( $model->to_template_create );
+    $self->stash( $self->_template_common( $template, $msg ) );
+
+    # 簡易的なバリデート
+    return $self->render_fillin( $template, $params )
+        if !$model->easy_validate;
+
+    # 登録実行
+    my $store_id = $model->store;
+
+    # 書き込み保存終了、リダイレクト終了
+    $self->flash( msg => '登録完了しました' );
+    $self->redirect_to("/sanpo/pet/$store_id");
     return;
 }
 
