@@ -1,12 +1,11 @@
 use Mojo::Base -strict;
-
 use Test::More;
 use Test::Mojo;
-
-# テスト共通
+use Mojo::Util qw{dumper};
 use t::Util;
-my $t = t::Util::init();
-use Data::Dumper;
+
+my $test_util = t::Util->new();
+my $t = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
@@ -30,7 +29,7 @@ subtest 'router' => sub {
 subtest 'get /sanpo/pet/:id show' => sub {
 
     # ログインをする
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
@@ -53,8 +52,9 @@ subtest 'get /sanpo/pet/:id show' => sub {
     };
 
     # ログアウトをする
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
+
 
 # ペット情報編集画面
 subtest 'get /sanpo/pet/:id/edit edit' => sub {
@@ -63,7 +63,7 @@ subtest 'get /sanpo/pet/:id/edit edit' => sub {
 
 # ペット情報新規登録画面
 subtest 'get /sanpo/pet/create create' => sub {
-    t::Util::login($t);
+    $test_util->login($t);
 
     # 入力画面
     subtest 'template' => sub {
@@ -106,13 +106,13 @@ subtest 'get /sanpo/pet/create create' => sub {
         $t->element_exists("a[href=$menu_url]");
     };
 
-    t::Util::logout($t);
+    $test_util->logout($t);
     ok(1);
 };
 
 # ペット情報新規登録実行
 subtest 'post /sanpo/pet store' => sub {
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'success' => sub {
         my $login_user = $t->app->login_user;
         my $cond       = +{ user_id => $login_user->id };
@@ -139,10 +139,10 @@ subtest 'post /sanpo/pet store' => sub {
         $pet_hash->{gender} = 2;
 
         # dom に 値を埋め込み
-        $dom = t::Util::input_val_in_dom( $dom, $form, $pet_hash );
+        $dom = $test_util->input_val_in_dom( $dom, $form, $pet_hash );
 
         # input val 取得
-        my $params = t::Util::get_input_val( $dom, $form );
+        my $params = $test_util->get_input_val( $dom, $form );
 
         # 実行
         $t->post_ok( $action_url => form => $params )->status_is(200);
@@ -161,7 +161,7 @@ subtest 'post /sanpo/pet store' => sub {
         ok(1);
     };
 
-    t::Util::logout($t);
+    $test_util->logout($t);
 
     ok(1);
 };
@@ -170,7 +170,7 @@ subtest 'post /sanpo/pet store' => sub {
 subtest 'get /sanpo/pet/search search' => sub {
 
     # ログインをする
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'template' => sub {
         my $url = "/sanpo/pet/search";
         $t->get_ok($url)->status_is(200);
@@ -185,7 +185,7 @@ subtest 'get /sanpo/pet/search search' => sub {
     };
 
     # ログアウトをする
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
 
 # ペット情報更新実行

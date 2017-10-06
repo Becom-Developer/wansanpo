@@ -1,12 +1,11 @@
 use Mojo::Base -strict;
-
 use Test::More;
 use Test::Mojo;
-
-# テスト共通
+use Mojo::Util qw{dumper};
 use t::Util;
-my $t = t::Util::init();
-use Data::Dumper;
+
+my $test_util = t::Util->new();
+my $t = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
@@ -27,7 +26,7 @@ subtest 'router' => sub {
 subtest 'show' => sub {
 
     # ログインをする
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
@@ -49,13 +48,13 @@ subtest 'show' => sub {
     };
 
     # ログアウトをする
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
 
 subtest 'search' => sub {
 
     # ログインをする
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'template' => sub {
         my $url = "/sanpo/profile/search";
         $t->get_ok($url)->status_is(200);
@@ -70,13 +69,13 @@ subtest 'search' => sub {
     };
 
     # ログアウトをする
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
 
 subtest 'edit' => sub {
 
     # ログインをする
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
@@ -114,13 +113,13 @@ subtest 'edit' => sub {
     };
 
     # ログアウトをする
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
 
 # ユーザー情報更新実行
 subtest 'update' => sub {
 
-    t::Util::login($t);
+    $test_util->login($t);
     subtest 'fail' => sub {
 
         # ログイン中はユーザーID取得できる
@@ -139,7 +138,7 @@ subtest 'update' => sub {
         my $update_url = $dom->at($form)->attr('action');
 
         # input val 取得
-        my $params = t::Util::get_input_val( $dom, $form );
+        my $params = $test_util->get_input_val( $dom, $form );
 
         # 名前 (必須項目)
         my $name_org  = $params->{name};
@@ -176,7 +175,7 @@ subtest 'update' => sub {
         my $update_url = $dom->at($form)->attr('action');
 
         # input val 取得
-        my $params = t::Util::get_input_val( $dom, $form );
+        my $params = $test_util->get_input_val( $dom, $form );
 
         # 名前更新
         my $test_name = 'sample_name';
@@ -196,7 +195,7 @@ subtest 'update' => sub {
         is( $row->name, $test_name, 'name' );
     };
 
-    t::Util::logout($t);
+    $test_util->logout($t);
 };
 
 # ユーザー情報削除(退会)

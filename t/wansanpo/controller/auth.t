@@ -1,12 +1,11 @@
 use Mojo::Base -strict;
-
 use Test::More;
 use Test::Mojo;
-use Data::Dumper;
-
-# テスト共通
+use Mojo::Util qw{dumper};
 use t::Util;
-my $t = t::Util::init();
+
+my $test_util = t::Util->new();
+my $t = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
@@ -125,7 +124,7 @@ subtest '/auth/login' => sub {
         $dom->at('input[name=password]')->attr( +{ value => $password } );
 
         # input val 取得
-        my $params = t::Util::get_input_val( $dom, $form );
+        my $params = $test_util->get_input_val( $dom, $form );
 
         # ログイン実行
         $t->post_ok( $action_url => form => $params )->status_is(302);

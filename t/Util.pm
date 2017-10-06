@@ -1,5 +1,5 @@
 package t::Util;
-use Mojo::Base -strict;
+use Mojo::Base -base;
 use Test::More;
 use Test::Mojo;
 use Mojo::Util qw{dumper};
@@ -15,6 +15,7 @@ t::Util - テストコードユーティリティ
 
 # データ初期化など
 sub init {
+    my $self = shift;
 
     # app 実行前に mode 切り替え conf が読まれなくなる
     $ENV{MOJO_MODE} = 'testing';
@@ -33,6 +34,7 @@ sub init {
 
 # ログインする
 sub login {
+    my $self = shift;
     my $t = shift;
 
     # テスト用の user データの存在確認
@@ -54,6 +56,7 @@ sub login {
 
 # ログアウトする
 sub logout {
+    my $self = shift;
     my $t = shift;
 
     # ログアウトの実行
@@ -72,34 +75,37 @@ sub logout {
 
 # input 入力フォームの値を取得
 sub get_input_val {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
 
     # input text 取得
-    my $text_params = _get_input_text_val( $dom, $form );
+    my $text_params = $self->_get_input_text_val( $dom, $form );
 
     # input radio 取得
-    my $radio_params = _get_input_radio_val( $dom, $form );
+    my $radio_params = $self->_get_input_radio_val( $dom, $form );
     my $params = +{ %{$text_params}, %{$radio_params}, };
     return $params;
 }
 
 # dom に値を埋め込み
 sub input_val_in_dom {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
     my $data = shift;
 
     # input text
-    $dom = t::Util::_text_val_in_dom( $dom, $form, $data );
+    $dom = $self->_text_val_in_dom( $dom, $form, $data );
 
     # input radio
-    $dom = t::Util::_radio_val_in_dom( $dom, $form, $data );
+    $dom = $self->_radio_val_in_dom( $dom, $form, $data );
     return $dom;
 }
 
 # input text 入力フォームの値を取得
 sub _get_input_text_val {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
 
@@ -114,6 +120,7 @@ sub _get_input_text_val {
 
 # input radio 入力フォームの値を取得
 sub _get_input_radio_val {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
 
@@ -131,6 +138,7 @@ sub _get_input_radio_val {
 
 # input text の name を全て取得
 sub _get_input_text_names {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
 
@@ -145,6 +153,7 @@ sub _get_input_text_names {
 
 # input radio の name を全て取得
 sub _get_input_radio_names {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
 
@@ -162,11 +171,12 @@ sub _get_input_radio_names {
 
 # input text 値の埋め込み
 sub _text_val_in_dom {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
     my $data = shift;
 
-    my $names = t::Util::_get_input_text_names( $dom, $form );
+    my $names = $self->_get_input_text_names( $dom, $form );
     for my $name ( @{$names} ) {
         my $val = $data->{$name};
         $dom->at("$form input[name=$name]")->attr( +{ value => $val } );
@@ -176,11 +186,12 @@ sub _text_val_in_dom {
 
 # input radio 値の埋め込み
 sub _radio_val_in_dom {
+    my $self = shift;
     my $dom  = shift;
     my $form = shift;
     my $data = shift;
 
-    my $names = t::Util::_get_input_radio_names( $dom, $form );
+    my $names = $self->_get_input_radio_names( $dom, $form );
 
     # checked をはずす
     for my $e ( $dom->find("$form input[type=radio][checked]")->each ) {
