@@ -21,6 +21,13 @@ sub fetch_profile {
     return $self->handle->single( 'profile', $cond );
 }
 
+sub search_pet {
+    my $self = shift;
+    my $cond = +{ user_id => $self->id, deleted => 0, };
+    my @rows = $self->handle->search( 'pet', $cond );
+    return \@rows;
+}
+
 # 始めてのログイン
 sub is_first_login {
     my $self = shift;

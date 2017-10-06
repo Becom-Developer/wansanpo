@@ -35,7 +35,7 @@ sub init {
 # ログインする
 sub login {
     my $self = shift;
-    my $t = shift;
+    my $t    = shift;
 
     # テスト用の user データの存在確認
     my $row = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
@@ -57,7 +57,7 @@ sub login {
 # ログアウトする
 sub logout {
     my $self = shift;
-    my $t = shift;
+    my $t    = shift;
 
     # ログアウトの実行
     $t->post_ok('/auth/logout')->status_is(302);
@@ -207,7 +207,6 @@ sub _radio_val_in_dom {
     }
     return $dom;
 }
-
 
 1;
 

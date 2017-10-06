@@ -5,7 +5,7 @@ use Mojo::Util qw{dumper};
 use t::Util;
 
 my $test_util = t::Util->new();
-my $t = $test_util->init;
+my $t         = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
@@ -30,9 +30,7 @@ subtest 'show' => sub {
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
-        my $login_user = $t->app->login_user;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $profile    = $t->app->login_user->fetch_profile;
         my $profile_id = $profile->id;
         my $url        = "/sanpo/profile/$profile_id";
         $t->get_ok($url)->status_is(200);
@@ -79,11 +77,7 @@ subtest 'edit' => sub {
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
-        my $login_user = $t->app->login_user;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
-        my $profile_id = $profile->id;
-
+        my $profile_id = $t->app->login_user->fetch_profile->id;
         my $edit_url   = "/sanpo/profile/$profile_id/edit";
         my $update_url = "/sanpo/profile/$profile_id/update";
         my $show_url   = "/sanpo/profile/$profile_id";
@@ -123,11 +117,8 @@ subtest 'update' => sub {
     subtest 'fail' => sub {
 
         # ログイン中はユーザーID取得できる
-        my $login_user = $t->app->login_user;
         my $teng       = $t->app->test_db->teng;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $teng->single( 'profile', $cond );
-        my $profile_id = $profile->id;
+        my $profile_id = $t->app->login_user->fetch_profile->id;
         my $edit_url   = "/sanpo/profile/$profile_id/edit";
 
         # 編集画面
@@ -160,11 +151,8 @@ subtest 'update' => sub {
     subtest 'success' => sub {
 
         # ログイン中はユーザーID取得できる
-        my $login_user = $t->app->login_user;
         my $teng       = $t->app->test_db->teng;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $teng->single( 'profile', $cond );
-        my $profile_id = $profile->id;
+        my $profile_id = $t->app->login_user->fetch_profile->id;
         my $edit_url   = "/sanpo/profile/$profile_id/edit";
 
         # 編集画面

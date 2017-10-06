@@ -5,7 +5,7 @@ use Mojo::Util qw{dumper};
 use t::Util;
 
 my $test_util = t::Util->new();
-my $t = $test_util->init;
+my $t         = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
@@ -33,11 +33,9 @@ subtest 'get /sanpo/pet/:id show' => sub {
     subtest 'template' => sub {
 
         # ログイン中はユーザーID取得できる
-        my $login_user = $t->app->login_user;
-        my $cond       = +{ user_id => $login_user->id };
-        my @pet_rows   = $t->app->test_db->teng->search( 'pet', $cond );
-        is( scalar @pet_rows, 1, 'count' );
-        my $pet_row = shift @pet_rows;
+        my $pet_rows = $t->app->login_user->search_pet;
+        is( scalar @{$pet_rows}, 1, 'count' );
+        my $pet_row = shift @{$pet_rows};
         my $pet_id  = $pet_row->id;
         my $url     = "/sanpo/pet/$pet_id";
         $t->get_ok($url)->status_is(200);
@@ -55,7 +53,6 @@ subtest 'get /sanpo/pet/:id show' => sub {
     $test_util->logout($t);
 };
 
-
 # ペット情報編集画面
 subtest 'get /sanpo/pet/:id/edit edit' => sub {
     ok(1);
@@ -67,11 +64,7 @@ subtest 'get /sanpo/pet/create create' => sub {
 
     # 入力画面
     subtest 'template' => sub {
-        my $login_user = $t->app->login_user;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
-        my $profile_id = $profile->id;
-
+        my $profile_id  = $t->app->login_user->fetch_profile->id;
         my $create_url  = '/sanpo/pet/create';
         my $name        = 'form_create';
         my $action      = '/sanpo/pet';
@@ -114,9 +107,7 @@ subtest 'get /sanpo/pet/create create' => sub {
 subtest 'post /sanpo/pet store' => sub {
     $test_util->login($t);
     subtest 'success' => sub {
-        my $login_user = $t->app->login_user;
-        my $cond       = +{ user_id => $login_user->id };
-        my $profile    = $t->app->test_db->teng->single( 'profile', $cond );
+        my $pet_rows   = $t->app->login_user->search_pet;
         my $create_url = '/sanpo/pet/create';
         my $name       = 'form_create';
         my $action     = '/sanpo/pet';
@@ -130,8 +121,7 @@ subtest 'post /sanpo/pet store' => sub {
         my $action_url = $dom->at($form)->attr('action');
 
         # 入力データーの元
-        my $pets     = $profile->search_pet;
-        my $pet      = shift @{$pets};
+        my $pet      = shift @{$pet_rows};
         my $pet_hash = $pet->get_columns;
 
         # test_pet メス
