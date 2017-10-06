@@ -23,11 +23,11 @@ sub show {
     my $self = shift;
 
     my $params = +{ id => $self->stash->{id}, };
-    my $pet_model = $self->model->sanpo->pet->req_params($params);
+    my $model = $self->model->sanpo->pet->req_params($params);
 
     # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user = $pet_model->is_login_user( $self->login_user->id );
-    $self->stash( $pet_model->to_template_show );
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    $self->stash( $model->to_template_show );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common('sanpo/pet/show') );
     $self->render;
@@ -54,10 +54,10 @@ sub edit {
 
 # ペット情報新規登録画面
 sub create {
-    my $self      = shift;
-    my $params    = +{ user_id => $self->login_user->id, };
-    my $pet_model = $self->model->sanpo->pet->req_params($params);
-    $self->stash( $pet_model->to_template_create );
+    my $self   = shift;
+    my $params = +{ user_id => $self->login_user->id, };
+    my $model  = $self->model->sanpo->pet->req_params($params);
+    $self->stash( $model->to_template_create );
     $self->stash( $self->_template_common('sanpo/pet/create') );
     $self->render;
     return;
@@ -96,8 +96,8 @@ sub search {
     my $self = shift;
 
     # 今回は検索機能は実装しない
-    my $pet_model = $self->model->sanpo->pet;
-    $self->stash( $pet_model->to_template_search );
+    my $model = $self->model->sanpo->pet;
+    $self->stash( $model->to_template_search );
     $self->stash( $self->_template_common('sanpo/pet/search') );
     $self->render;
     return;

@@ -21,27 +21,27 @@ sub _template_common {
 # ユーザ登録画面
 sub create {
     my $self = shift;
-    $self->stash($self->_template_common('auth/entry'));
+    $self->stash( $self->_template_common('auth/entry') );
     $self->render;
     return;
 }
 
 # ユーザー登録実行
 sub store {
-    my $self       = shift;
-    my $params     = $self->req->params->to_hash;
-    my $auth_model = $self->model->auth->req_params($params);
-    my $msg        = '登録できません';
-    $self->stash($self->_template_common('auth/entry', $msg));
+    my $self   = shift;
+    my $params = $self->req->params->to_hash;
+    my $model  = $self->model->auth->req_params($params);
+    my $msg    = '登録できません';
+    $self->stash( $self->_template_common( 'auth/entry', $msg ) );
 
     # 簡易的なバリデート
-    return $self->render if !$auth_model->easy_validate;
+    return $self->render if !$model->easy_validate;
 
     # 登録実行
-    $auth_model->store;
+    $model->store;
 
     # 書き込み保存終了、リダイレクト終了
-    $self->flash(msg => 'ユーザー登録完了しました');
+    $self->flash( msg => 'ユーザー登録完了しました' );
     $self->redirect_to('/auth/entry');
     return;
 }
@@ -59,9 +59,9 @@ sub login {
 
 # ログイン確認実行
 sub check {
-    my $self       = shift;
-    my $params     = $self->req->params->to_hash;
-    my $auth_model = $self->model->auth->req_params($params);
+    my $self   = shift;
+    my $params = $self->req->params->to_hash;
+    my $model  = $self->model->auth->req_params($params);
 
     $self->stash(
         msg      => 'ユーザーが存在しません',
@@ -71,21 +71,22 @@ sub check {
     );
 
     # DB 存在確認
-    my $login_user = $auth_model->check;
+    my $login_user = $model->check;
     return $self->render if !$login_user;
 
     # 認証
-    $self->session(user => $params->{login_id});
+    $self->session( user => $params->{login_id} );
 
     # 始めてのログインはプロフィールへ
-    if ($login_user->is_first_login) {
+    if ( $login_user->is_first_login ) {
         my $profile_id = $login_user->fetch_profile->id;
-        $self->flash(msg => 'プロフィールを登録してください');
+        $self->flash(
+            msg => 'プロフィールを登録してください' );
         $self->redirect_to("/sanpo/profile/$profile_id/edit");
         return;
     }
 
-    $self->flash(msg => 'ユーザーログインしました');
+    $self->flash( msg => 'ユーザーログインしました' );
     $self->redirect_to('/sanpo/menu');
     return;
 }
@@ -100,7 +101,7 @@ sub logged_in {
 # ログアウト実行
 sub logout {
     my $self = shift;
-    $self->session(expires => 1);
+    $self->session( expires => 1 );
     $self->redirect_to('/info/intro');
     return;
 }
@@ -108,14 +109,14 @@ sub logout {
 # パスワード変更画面
 sub edit {
     my $self = shift;
-    $self->render(text => 'edit');
+    $self->render( text => 'edit' );
     return;
 }
 
 # パスワード変更実行
 sub update {
     my $self = shift;
-    $self->render(text => 'update');
+    $self->render( text => 'update' );
     return;
 }
 

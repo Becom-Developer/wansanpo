@@ -23,12 +23,11 @@ sub show {
     my $self = shift;
 
     my $params = +{ id => $self->stash->{id}, };
-    my $profile_model = $self->model->sanpo->profile->req_params($params);
+    my $model = $self->model->sanpo->profile->req_params($params);
 
     # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user
-        = $profile_model->is_login_user( $self->login_user->id );
-    $self->stash( $profile_model->to_template_show );
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    $self->stash( $model->to_template_show );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common('sanpo/profile/show') );
     $self->render;
@@ -40,16 +39,15 @@ sub edit {
     my $self = shift;
 
     my $params = +{ id => $self->stash->{id}, };
-    my $profile_model = $self->model->sanpo->profile->req_params($params);
+    my $model = $self->model->sanpo->profile->req_params($params);
 
     # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user
-        = $profile_model->is_login_user( $self->login_user->id );
-    my $template = 'sanpo/profile/edit';
-    $self->stash( $profile_model->to_template_edit );
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    my $template      = 'sanpo/profile/edit';
+    $self->stash( $model->to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common($template) );
-    my $profile_params = $profile_model->to_template_edit->{profile};
+    my $profile_params = $model->to_template_edit->{profile};
     $self->render_fillin( $template, $profile_params );
     return;
 }
@@ -59,8 +57,8 @@ sub search {
     my $self = shift;
 
     # 今回は検索機能は実装しない
-    my $profile_model = $self->model->sanpo->profile;
-    $self->stash( $profile_model->to_template_search );
+    my $model = $self->model->sanpo->profile;
+    $self->stash( $model->to_template_search );
     $self->stash( $self->_template_common('sanpo/profile/search') );
     $self->render;
     return;
@@ -72,21 +70,20 @@ sub update {
     my $params = $self->req->params->to_hash;
 
     $params->{id} = $self->stash->{id};
-    my $profile_model = $self->model->sanpo->profile->req_params($params);
+    my $model         = $self->model->sanpo->profile->req_params($params);
     my $msg           = '更新できません';
-    my $is_login_user
-        = $profile_model->is_login_user( $self->login_user->id );
-    my $template = 'sanpo/profile/edit';
-    $self->stash( $profile_model->to_template_edit );
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    my $template      = 'sanpo/profile/edit';
+    $self->stash( $model->to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common( $template, $msg ) );
 
     # 簡易的なバリデート
     return $self->render_fillin( $template, $params )
-        if !$profile_model->easy_validate;
+        if !$model->easy_validate;
 
     # 実行
-    my $update_id = $profile_model->update;
+    my $update_id = $model->update;
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'ユーザー更新完了しました' );
