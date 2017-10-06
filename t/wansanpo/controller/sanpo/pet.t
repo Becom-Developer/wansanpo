@@ -55,7 +55,41 @@ subtest 'get /sanpo/pet/:id show' => sub {
 
 # ペット情報編集画面
 subtest 'get /sanpo/pet/:id/edit edit' => sub {
-    ok(1);
+    $test_util->login($t);
+    subtest 'template' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $pet_rows = $t->app->login_user->search_pet;
+        is( scalar @{$pet_rows}, 1, 'count' );
+        my $pet_row    = shift @{$pet_rows};
+        my $pet_id     = $pet_row->id;
+        my $edit_url   = "/sanpo/pet/$pet_id/edit";
+        my $update_url = "/sanpo/pet/$pet_id/update";
+        my $show_url   = "/sanpo/pet/$pet_id";
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/edit\E}, );
+
+        # form
+        my $form = "form[name=form_update][method=post][action=$update_url]";
+        $t->element_exists($form);
+
+        # input text
+        my $text_names = [qw{type name birthday note}];
+        for my $name ( @{$text_names} ) {
+            $t->element_exists("$form input[name=$name][type=text]");
+        }
+
+        # input radio
+        $t->element_exists("$form input[name=gender][type=radio][value=1]");
+        $t->element_exists("$form input[name=gender][type=radio][value=2]");
+
+        # 他 button, link
+        $t->element_exists("$form button[type=submit]");
+        $t->element_exists("a[href=$show_url]");
+    };
+    $test_util->logout($t);
 };
 
 # ペット情報新規登録画面

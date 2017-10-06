@@ -31,6 +31,8 @@ sanpo/profile - wansanpo ユーザー情報
 ユーザー情報一式表示
 編集実行のボタン
 ユーザー情報詳細へのボタン
+TODO
+    アイコン画像の登録は別アクション
 ```
 
 ## GET - `/sanpo/profile/search` - ユーザー情報検索(お仲間)

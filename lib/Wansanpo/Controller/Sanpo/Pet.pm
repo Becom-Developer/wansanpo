@@ -37,7 +37,18 @@ sub show {
 # ペット情報編集画面
 sub edit {
     my $self = shift;
-    $self->render( text => 'edit' );
+
+    my $params = +{ id => $self->stash->{id}, };
+    my $model = $self->model->sanpo->pet->req_params($params);
+
+    # ログイン者以外の場合は編集ボタンを表示しない
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    my $template      = 'sanpo/pet/edit';
+    $self->stash( $model->to_template_edit );
+    $self->stash( is_login_user => $is_login_user );
+    $self->stash( $self->_template_common($template) );
+    my $pet_params = $model->to_template_edit->{pet};
+    $self->render_fillin( $template, $pet_params );
     return;
 }
 
