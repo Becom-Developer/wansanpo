@@ -251,7 +251,85 @@ subtest 'get /sanpo/pet/search search' => sub {
 
 # ペット情報更新実行
 subtest 'post /sanpo/pet/:id/update update' => sub {
-    ok(1);
+    $t->app->commands->run('generate_db');
+    $test_util->login($t);
+    subtest 'fail' => sub {
+        my $teng     = $t->app->test_db->teng;
+        my $pet_rows = $t->app->login_user->search_pet;
+        is( scalar @{$pet_rows}, 1, 'count' );
+        my $pet_row  = shift @{$pet_rows};
+        my $pet_id   = $pet_row->id;
+        my $edit_url = "/sanpo/pet/$pet_id/edit";
+        my $show_url = "/sanpo/pet/$pet_id";
+        my $action   = "/sanpo/pet/$pet_id/update";
+        my $name     = 'form_update';
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = "form[name=$name][method=post][action=$action]";
+        my $update_url = $dom->at($form)->attr('action');
+
+        # input val 取得
+        my $params = $test_util->get_input_val( $dom, $form );
+
+        # 名前 (必須項目)
+        my $name_org  = $params->{name};
+        my $test_name = '';
+        $params->{name} = $test_name;
+
+        # 更新実行
+        $t->post_ok( $update_url => form => $params )->status_is(200);
+
+        # 画面確認
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/edit\E}, );
+        $t->content_like(qr{\Q<b>更新できません</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'pet', +{ id => $pet_id } );
+        is( $row->name, $name_org, 'name' );
+    };
+
+    subtest 'success' => sub {
+        my $teng     = $t->app->test_db->teng;
+        my $pet_rows = $t->app->login_user->search_pet;
+        is( scalar @{$pet_rows}, 1, 'count' );
+        my $pet_row  = shift @{$pet_rows};
+        my $pet_id   = $pet_row->id;
+        my $edit_url = "/sanpo/pet/$pet_id/edit";
+
+        my $action = "/sanpo/pet/$pet_id/update";
+        my $name   = 'form_update';
+
+        # 編集画面
+        $t->get_ok($edit_url)->status_is(200);
+
+        my $dom        = $t->tx->res->dom;
+        my $form       = "form[name=$name][method=post][action=$action]";
+        my $update_url = $dom->at($form)->attr('action');
+
+        # input val 取得
+        my $params = $test_util->get_input_val( $dom, $form );
+
+        # 名前更新
+        my $test_name = 'sample_name';
+        $params->{name} = $test_name;
+
+        # 更新実行
+        $t->post_ok( $update_url => form => $params )->status_is(302);
+
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/show\E}, );
+        $t->content_like(qr{\Q<b>ペット更新完了しました</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'pet', +{ id => $pet_id } );
+        is( $row->name, $test_name, 'name' );
+    };
+    $test_util->logout($t);
 };
 
 # ペット情報削除

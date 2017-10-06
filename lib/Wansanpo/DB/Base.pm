@@ -59,7 +59,9 @@ sub teng_update {
     my $cond   = shift;
 
     $params = +{ %{$params}, modified_ts => now_datetime(), };
-    return $self->teng->update( $table, $params, $cond, );
+    my $update_count = $self->teng->update( $table, $params, $cond, );
+    return $cond->{id} if $update_count;
+    return;
 }
 
 1;

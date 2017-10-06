@@ -62,6 +62,17 @@ sub store {
     return $self->db->teng_fast_insert( 'pet', $params );
 }
 
+# 更新実行
+sub update {
+    my $self   = shift;
+    my $pet_id = $self->req_params->{id};
+    my $params = +{ %{ $self->req_params }, };
+    delete $params->{id};
+    my $cond = +{ id => $pet_id };
+    my $update_id = $self->db->teng_update( 'pet', $params, $cond );
+    return $update_id;
+}
+
 # テンプレ一覧用値取得
 sub to_template_show {
     my $self = shift;

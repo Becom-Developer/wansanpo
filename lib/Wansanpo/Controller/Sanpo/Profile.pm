@@ -71,7 +71,6 @@ sub update {
     my $self   = shift;
     my $params = $self->req->params->to_hash;
 
-    my $profile_id = $self->stash->{id};
     $params->{id} = $self->stash->{id};
     my $profile_model = $self->model->sanpo->profile->req_params($params);
     my $msg           = '更新できません';
@@ -86,12 +85,12 @@ sub update {
     return $self->render_fillin( $template, $params )
         if !$profile_model->easy_validate;
 
-    # 登録実行
-    $profile_model->update;
+    # 実行
+    my $update_id = $profile_model->update;
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'ユーザー更新完了しました' );
-    $self->redirect_to("/sanpo/profile/$profile_id");
+    $self->redirect_to("/sanpo/profile/$update_id");
     return;
 }
 

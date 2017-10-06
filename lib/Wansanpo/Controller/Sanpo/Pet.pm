@@ -105,8 +105,27 @@ sub search {
 
 # ペット情報更新実行
 sub update {
-    my $self = shift;
-    $self->render( text => 'update' );
+    my $self   = shift;
+    my $params = $self->req->params->to_hash;
+    $params->{id} = $self->stash->{id};
+    my $model         = $self->model->sanpo->pet->req_params($params);
+    my $msg           = '更新できません';
+    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    my $template      = 'sanpo/pet/edit';
+    $self->stash( $model->to_template_edit );
+    $self->stash( is_login_user => $is_login_user );
+    $self->stash( $self->_template_common( $template, $msg ) );
+
+    # 簡易的なバリデート
+    return $self->render_fillin( $template, $params )
+        if !$model->easy_validate;
+
+    # 実行
+    my $update_id = $model->update;
+
+    # 書き込み保存終了、リダイレクト終了
+    $self->flash( msg => 'ペット更新完了しました' );
+    $self->redirect_to("/sanpo/pet/$update_id");
     return;
 }
 

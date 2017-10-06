@@ -36,8 +36,8 @@ sub update {
     my $params     = +{ %{ $self->req_params }, };
     delete $params->{id};
     my $cond = +{ id => $profile_id };
-    $self->db->teng_update( 'profile', $params, $cond );
-    return;
+    my $update_id = $self->db->teng_update( 'profile', $params, $cond );
+    return $update_id;
 }
 
 # ログイン者であることの確認
