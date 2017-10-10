@@ -17,6 +17,7 @@
               <li class="<%== $class_active->{menu} || '' =%>" ><a href="/sanpo/menu">Menu / アプリメニュー</a></li>
               <li class="<%== $class_active->{profile} || '' =%>" ><a href="/sanpo/profile/search">Profile / ユーザー情報</a></li>
               <li class="<%== $class_active->{pet} || '' =%>" ><a href="/sanpo/pet/search">Pet / ペット情報</a></li>
+              <li class="<%== $class_active->{message} || '' =%>" ><a href="/sanpo/message/search">Message / メッセージ情報</a></li>
             </ul>
           </li>
         </ul>

@@ -6,14 +6,14 @@ sanpo/message - wansanpo メッセージ
 
 ## URL
 
-- GET - `/sanpo/message/:id` - メッセージ詳細
-- GET - `/sanpo/message/create` - メッセージを新規作成する画面
-- POST - `/sanpo/message` - メッセージ新規登録実行
-- GET - `/sanpo/message/:id/edit` - メッセージを編集する画面
-- POST - `/sanpo/message/:id/update` - メッセージを更新実行
-- GET - `/sanpo/message/search` - メッセージ情報検索画面
-- GET - `/sanpo/message/list/:id` - メッセージ情報ユーザー個別に一覧表示
-- POST - `/sanpo/message/:id/remove` - メッセージ情報削除
+- GET - `/sanpo/message/:id` - show - メッセージ詳細
+- GET - `/sanpo/message/create` - create - メッセージを新規作成する画面
+- POST - `/sanpo/message` - store - メッセージ新規登録実行
+- GET - `/sanpo/message/:id/edit` - edit - メッセージを編集する画面
+- POST - `/sanpo/message/:id/update` - update - メッセージを更新実行
+- GET - `/sanpo/message/search` - search - メッセージ情報検索画面
+- GET - `/sanpo/message/list/:id` - list - メッセージ情報ユーザー個別に一覧表示
+- POST - `/sanpo/message/:id/remove` - remove - メッセージ情報削除
 
 ## GET - `/sanpo/message/:id` - show - メッセージ詳細
 

@@ -1,5 +1,6 @@
 package Wansanpo::DB::Teng::Row::User;
 use Mojo::Base 'Teng::Row';
+use Mojo::Collection;
 
 =encoding utf8
 
@@ -35,6 +36,37 @@ sub is_first_login {
     my $row  = $self->handle->single( 'profile', $cond );
     return 1 if !defined $row->name || $row->name eq '';
     return;
+}
+
+# メッセージ履歴のあるユーザー情報を取得
+sub search_msg_friend_profile {
+    my $self = shift;
+
+    my $msg_friend_ids = [];
+
+    # 自分が送信者のメッセージから宛先のユーザー
+    my $cond = +{ from_user_id => $self->id, deleted => 0, };
+    my @message_rows = $self->handle->search( 'message', $cond );
+
+    for my $msg (@message_rows) {
+        push @{$msg_friend_ids}, $msg->to_user_id;
+    }
+
+    # 自分が宛先のメッセージから送信者のユーザー
+    $cond = +{ to_user_id => $self->id, deleted => 0, };
+    @message_rows = $self->handle->search( 'message', $cond );
+
+    for my $msg (@message_rows) {
+        push @{$msg_friend_ids}, $msg->from_user_id;
+    }
+
+    my $collection = Mojo::Collection->new( @{$msg_friend_ids} );
+    my $ids        = $collection->uniq->to_array;
+
+    # プロフィール情報を取得
+    $cond = +{ user_id => $ids, deleted => 0, };
+    my @profile_rows = $self->handle->search( 'profile', $cond );
+    return \@profile_rows;
 }
 
 1;

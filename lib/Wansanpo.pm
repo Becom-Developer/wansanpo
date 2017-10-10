@@ -100,14 +100,14 @@ sub startup {
     $r->get('/sanpo/pet/:id')->to('Sanpo::Pet#show');
 
     # wansanpo メッセージ
-
-# - GET - `/sanpo/message/:id` - メッセージ詳細
-# - GET - `/sanpo/message/create` - メッセージを新規作成する画面
-# - POST - `/sanpo/message` - メッセージ新規登録実行
-# - GET - `/sanpo/message/:id/edit` - メッセージを編集する画面
-# - POST - `/sanpo/message/:id/update` - メッセージを更新実行
-# - GET - `/sanpo/message/search` - メッセージ情報検索画面
-# - POST - `/sanpo/message/:id/remove` - メッセージ情報削除
+    $r->get('/sanpo/message/search')->to('Sanpo::Message#search');
+    $r->get('/sanpo/message/:id')->to('Sanpo::Message#show');
+    $r->get('/sanpo/message/create')->to('Sanpo::Message#create');
+    $r->post('/sanpo/message')->to('Sanpo::Message#store');
+    $r->get('/sanpo/message/:id/edit')->to('Sanpo::Message#edit');
+    $r->post('/sanpo/message/:id/update')->to('Sanpo::Message#update');
+    $r->get('/sanpo/message/list/:id')->to('Sanpo::Message#list');
+    $r->post('/sanpo/message/:id/remove')->to('Sanpo::Message#remove');
 
     # 預け、預かり
 

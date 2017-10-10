@@ -2,6 +2,7 @@ package Wansanpo::Model::Sanpo;
 use Mojo::Base 'Wansanpo::Model::Base';
 use Wansanpo::Model::Sanpo::Profile;
 use Wansanpo::Model::Sanpo::Pet;
+use Wansanpo::Model::Sanpo::Message;
 
 =encoding utf8
 
@@ -17,6 +18,10 @@ has profile => sub {
 
 has pet => sub {
     Wansanpo::Model::Sanpo::Pet->new( +{ conf => shift->conf } );
+};
+
+has message => sub {
+    Wansanpo::Model::Sanpo::Message->new( +{ conf => shift->conf } );
 };
 
 # 呼び出しテスト
