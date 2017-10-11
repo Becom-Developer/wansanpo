@@ -43,9 +43,38 @@ subtest 'show' => sub {
         $t->element_exists("a[href=/sanpo/pet/create]");
         $t->element_exists("a[href=/sanpo/profile/search]");
         $t->element_exists("a[href=/sanpo/menu]");
+        $t->element_exists_not("a[href=/sanpo/message/create/$profile_id]");
     };
 
     # ログアウトをする
+    $test_util->logout($t);
+
+    # 指定をしてログイン
+    $test_util->login( $t, 2 );
+
+    # ログイン者以外のユーザーへはメッセージを送れる
+    subtest 'template logout' => sub {
+        my $login_profile    = $t->app->login_user->fetch_profile;
+        my $login_profile_id = $login_profile->id;
+
+        # 見ているユーザー情報
+        my $user = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
+        my $profile = $user->fetch_profile;
+        my $profile_id = $profile->id;
+
+        my $url = "/sanpo/profile/$profile_id";
+        $t->get_ok($url)->status_is(200);
+
+        # 主な部分のみ
+        # ボタン確認 編集画面, 検索, メニュー
+        my $name = $profile->name;
+        $t->content_like(qr{\Q$name\E});
+        $t->element_exists_not("a[href=/sanpo/profile/$profile_id/edit]");
+        $t->element_exists_not("a[href=/sanpo/pet/create]");
+        $t->element_exists("a[href=/sanpo/profile/search]");
+        $t->element_exists("a[href=/sanpo/menu]");
+        $t->element_exists("a[href=/sanpo/message/create/$profile_id]");
+    };
     $test_util->logout($t);
 };
 

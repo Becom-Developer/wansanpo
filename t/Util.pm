@@ -34,11 +34,12 @@ sub init {
 
 # ログインする
 sub login {
-    my $self = shift;
-    my $t    = shift;
+    my $self     = shift;
+    my $t        = shift;
+    my $login_id = shift || 1;
 
     # テスト用の user データの存在確認
-    my $row = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
+    my $row = $t->app->test_db->teng->single( 'user', +{ id => $login_id } );
     ok($row);
 
     my $params = +{

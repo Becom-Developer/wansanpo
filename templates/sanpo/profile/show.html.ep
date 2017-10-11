@@ -120,6 +120,13 @@
               <a href="/sanpo/pet/create" role="button" type="" class="btn btn-success btn-lg btn-block">ペット新規入力</a>
             </div>
             <!--/showback -->
+            % } else {
+            <!-- BUTTON BLOCK -->
+            <div class="showback">
+              <h4><i class="fa fa-angle-right"></i> このユーザーへメッセージを送る</h4>
+              <a href="/sanpo/message/create/<%= $profile->{id} %>" role="button" type="" class="btn btn-success btn-lg btn-block">メッセージを送る</a>
+            </div>
+            <!--/showback -->
             % }
             <!-- BUTTON BLOCK -->
             <div class="showback">
