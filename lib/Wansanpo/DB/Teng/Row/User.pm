@@ -69,6 +69,23 @@ sub search_msg_friend_profile {
     return \@profile_rows;
 }
 
+# メッセージ履歴を取得
+sub search_msg_history {
+    my $self      = shift;
+    my $friend_id = shift;
+
+    # 自分が送信した履歴 自分に送信された履歴
+    my $cond = +{
+        from_user_id => [ +{ '=' => $friend_id }, +{ '=' => $self->id } ],
+        to_user_id   => [ +{ '=' => $friend_id }, +{ '=' => $self->id } ],
+        deleted      => 0,
+    };
+
+    my $attr = +{ order_by => 'created_ts DESC' };
+    my @message_rows = $self->handle->search( 'message', $cond, $attr );
+    return \@message_rows;
+}
+
 1;
 
 __END__

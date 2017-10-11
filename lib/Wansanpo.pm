@@ -101,8 +101,8 @@ sub startup {
 
     # wansanpo メッセージ
     $r->get('/sanpo/message/search')->to('Sanpo::Message#search');
+    $r->get('/sanpo/message/create/:id')->to('Sanpo::Message#create');
     $r->get('/sanpo/message/:id')->to('Sanpo::Message#show');
-    $r->get('/sanpo/message/create')->to('Sanpo::Message#create');
     $r->post('/sanpo/message')->to('Sanpo::Message#store');
     $r->get('/sanpo/message/:id/edit')->to('Sanpo::Message#edit');
     $r->post('/sanpo/message/:id/update')->to('Sanpo::Message#update');

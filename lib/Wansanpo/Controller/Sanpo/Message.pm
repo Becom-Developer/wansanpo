@@ -70,7 +70,16 @@ sub search {
 # メッセージ情報ユーザー個別に一覧表示
 sub list {
     my $self = shift;
-    $self->render( text => 'list' );
+
+    my $params = +{
+        id      => $self->stash->{id},
+        user_id => $self->login_user->id,
+    };
+
+    my $model = $self->model->sanpo->message->req_params($params);
+    $self->stash( $model->to_template_list );
+    $self->stash( $self->_template_common('sanpo/message/list') );
+    $self->render;
     return;
 }
 

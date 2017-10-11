@@ -13,7 +13,7 @@ subtest 'router' => sub {
     $test_util->login($t);
     $t->ua->max_redirects(1);
     $t->get_ok("/sanpo/message/$dummy_id")->status_is(200);
-    $t->get_ok("/sanpo/message/create")->status_is(200);
+    $t->get_ok("/sanpo/message/create/$dummy_id")->status_is(200);
     $t->post_ok("/sanpo/message")->status_is(200);
     $t->get_ok("/sanpo/message/$dummy_id/edit")->status_is(200);
     $t->post_ok("/sanpo/message/$dummy_id/update")->status_is(200);
@@ -40,7 +40,7 @@ subtest 'get_ok /sanpo/message/:id show' => sub {
 };
 
 # メッセージを新規作成する画面
-subtest 'get_ok /sanpo/message/create create' => sub {
+subtest 'get_ok /sanpo/message/create/:id create' => sub {
     $test_util->login($t);
     subtest 'template' => sub {
         ok(1);
@@ -129,7 +129,6 @@ subtest 'get_ok /sanpo/message/search search' => sub {
 
 # メッセージ情報ユーザー個別に一覧表示
 subtest 'get_ok /sanpo/message/list/:id list' => sub {
-    $test_util->login($t);
     subtest 'template' => sub {
         ok(1);
     };
@@ -137,9 +136,25 @@ subtest 'get_ok /sanpo/message/list/:id list' => sub {
         ok(1);
     };
     subtest 'success' => sub {
-        ok(1);
+        my $user_id = 2;
+        $test_util->login( $t, $user_id );
+
+        # user 3 とのやりとり
+        my $friend_user_id = 3;
+        my $friend_user    = $t->app->test_db->teng->single( 'user',
+            +{ id => $friend_user_id } );
+
+        my $friend_profile_id = $friend_user->fetch_profile->id;
+        my $url               = "/sanpo/message/list/$friend_profile_id";
+        $t->get_ok($url)->status_is(200);
+
+        # 画面確認
+        $t->text_like( 'html head title', qr{\Qwansanpo/message/list\E}, );
+
+        # メッセージ新規画面へのリンクボタン
+        $t->element_exists("a[href=/sanpo/message/create/$friend_profile_id]");
+        $test_util->logout($t);
     };
-    $test_util->logout($t);
 };
 
 # メッセージ情報削除
