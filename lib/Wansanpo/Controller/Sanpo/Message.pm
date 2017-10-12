@@ -28,7 +28,24 @@ sub show {
 # メッセージを新規作成する画面
 sub create {
     my $self = shift;
-    $self->render( text => 'create' );
+
+    my $params = +{
+        from_user_id      => $self->login_user->id,
+        firend_profile_id => $self->stash->{id},
+    };
+
+    my $model = $self->model->sanpo->message->req_params($params);
+    my $to_template_create = $model->to_template_create;
+
+    # パラメータの取得に失敗時はメニューへ
+    if ( !$to_template_create ) {
+        $self->flash( msg => '不正な入力' );
+        $self->redirect_to("/sanpo/menu");
+        return;
+    }
+    $self->stash($to_template_create);
+    $self->stash( $self->_template_common('sanpo/message/create') );
+    $self->render;
     return;
 }
 
@@ -76,8 +93,16 @@ sub list {
         user_id => $self->login_user->id,
     };
 
-    my $model = $self->model->sanpo->message->req_params($params);
-    $self->stash( $model->to_template_list );
+    my $model            = $self->model->sanpo->message->req_params($params);
+    my $to_template_list = $model->to_template_list;
+
+    # パラメータの取得に失敗時はメニューへ
+    if ( !$to_template_list ) {
+        $self->flash( msg => '不正な入力' );
+        $self->redirect_to("/sanpo/menu");
+        return;
+    }
+    $self->stash($to_template_list);
     $self->stash( $self->_template_common('sanpo/message/list') );
     $self->render;
     return;

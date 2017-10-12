@@ -136,13 +136,8 @@ sub to_template_list {
     my $firend_profile = $self->db->teng->single( 'profile', $cond, );
 
     # 無効なユーザーの場合は終了
-    if ( !$firend_profile ) {
-        return +{
-            firend_profile => +{},
-            messages =>
-                [ +{ message => +{ message => '存在しません' }, } ]
-        };
-    }
+    return if !$firend_profile;
+
     my $firend_profile_hash = $firend_profile->get_columns;
     my $firend_user_id      = $firend_profile->user_id;
 
@@ -182,29 +177,41 @@ sub to_template_list {
     };
 }
 
-# # テンプレ新規登録
-# sub to_template_create {
-#     my $self = shift;
+# テンプレ新規登録
+sub to_template_create {
+    my $self = shift;
 
-#     my $user_id = $self->req_params->{user_id};
-#     return if !$user_id;
+    # 送る人の情報 ログインしている人
+    my $cond = +{
+        id      => $self->req_params->{from_user_id},
+        deleted => 0,
+    };
+    my $from_user = $self->db->teng->single( 'user', $cond );
+    return if !$from_user;
 
-#     my $cond = +{
-#         id      => $user_id,
-#         deleted => 0,
-#     };
-#     my $user_row = $self->db->teng->single( 'user', $cond );
-#     return if !$user_row;
+    my $from_user_hash_ref = +{
+        user    => $from_user->get_columns,
+        profile => $from_user->fetch_profile->get_columns,
+    };
 
-#     # ログインID
-#     my $user_hash_ref    = $user_row->get_columns;
-#     my $profile_hash_ref = $user_row->fetch_profile->get_columns;
+    # 送り先の情報 指定された profile_id
+    $cond = +{
+        id      => $self->req_params->{firend_profile_id},
+        deleted => 0,
+    };
+    my $to_profile = $self->db->teng->single( 'profile', $cond );
+    return if !$to_profile;
 
-#     return +{
-#         user    => $user_hash_ref,
-#         profile => $profile_hash_ref,
-#     };
-# }
+    my $to_user_hash_ref = +{
+        user    => $to_profile->fetch_user->get_columns,
+        profile => $to_profile->get_columns,
+    };
+
+    return +{
+        to_user   => $to_user_hash_ref,
+        from_user => $from_user_hash_ref,
+    };
+}
 
 1;
 
