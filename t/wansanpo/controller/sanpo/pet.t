@@ -9,20 +9,18 @@ my $t         = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
-
-    # 302リダイレクトレスポンスの許可
+    my $dummy_id = 9999;
+    $test_util->login($t);
     $t->ua->max_redirects(1);
-
-    $t->get_ok('/sanpo/pet/1')->status_is(200);
-    $t->get_ok('/sanpo/pet/1/edit')->status_is(200);
-    $t->get_ok('/sanpo/pet/create')->status_is(200);
-    $t->post_ok('/sanpo/pet')->status_is(200);
-    $t->get_ok('/sanpo/pet/search')->status_is(200);
-    $t->post_ok('/sanpo/pet/1/update')->status_is(200);
-    $t->post_ok('/sanpo/pet/1/remove')->status_is(200);
-
-    # 必ず戻す
+    $t->get_ok("/sanpo/pet/$dummy_id")->status_is(200);
+    $t->get_ok("/sanpo/pet/$dummy_id/edit")->status_is(200);
+    $t->get_ok("/sanpo/pet/create")->status_is(200);
+    $t->post_ok("/sanpo/pet")->status_is(200);
+    $t->get_ok("/sanpo/pet/search")->status_is(200);
+    $t->post_ok("/sanpo/pet/$dummy_id/update")->status_is(200);
+    $t->post_ok("/sanpo/pet/$dummy_id/remove")->status_is(200);
     $t->ua->max_redirects(0);
+    $test_util->logout($t);
 };
 
 # ペット情報詳細
