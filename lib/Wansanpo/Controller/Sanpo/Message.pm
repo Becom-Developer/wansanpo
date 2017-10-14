@@ -38,11 +38,8 @@ sub create {
     my $to_template_create = $model->to_template_create;
 
     # パラメータの取得に失敗時はメニューへ
-    if ( !$to_template_create ) {
-        $self->flash( msg => '不正な入力' );
-        $self->redirect_to("/sanpo/menu");
-        return;
-    }
+    return $self->redirect_to_error if !$to_template_create;
+
     $self->stash($to_template_create);
     $self->stash( $self->_template_common('sanpo/message/create') );
     $self->render;
@@ -97,11 +94,8 @@ sub list {
     my $to_template_list = $model->to_template_list;
 
     # パラメータの取得に失敗時はメニューへ
-    if ( !$to_template_list ) {
-        $self->flash( msg => '不正な入力' );
-        $self->redirect_to("/sanpo/menu");
-        return;
-    }
+    return $self->redirect_to_error if !$to_template_list;
+
     $self->stash($to_template_list);
     $self->stash( $self->_template_common('sanpo/message/list') );
     $self->render;

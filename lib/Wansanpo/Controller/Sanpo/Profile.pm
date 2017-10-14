@@ -27,7 +27,12 @@ sub show {
 
     # ログイン者以外の場合は編集ボタンを表示しない
     my $is_login_user = $model->is_login_user( $self->login_user->id );
-    $self->stash( $model->to_template_show );
+    my $to_template_show = $model->to_template_show;
+
+    # パラメータの取得に失敗時はメニューへ
+    return $self->redirect_to_error if !$to_template_show;
+
+    $self->stash( $to_template_show );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common('sanpo/profile/show') );
     $self->render;
@@ -44,7 +49,12 @@ sub edit {
     # ログイン者以外の場合は編集ボタンを表示しない
     my $is_login_user = $model->is_login_user( $self->login_user->id );
     my $template      = 'sanpo/profile/edit';
-    $self->stash( $model->to_template_edit );
+    my $to_template_edit = $model->to_template_edit;
+
+    # パラメータの取得に失敗時はメニューへ
+    return $self->redirect_to_error if !$to_template_edit;
+
+    $self->stash( $to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common($template) );
     my $profile_params = $model->to_template_edit->{profile};
@@ -74,7 +84,12 @@ sub update {
     my $msg           = '更新できません';
     my $is_login_user = $model->is_login_user( $self->login_user->id );
     my $template      = 'sanpo/profile/edit';
-    $self->stash( $model->to_template_edit );
+    my $to_template_edit = $model->to_template_edit;
+
+    # パラメータの取得に失敗時はメニューへ
+    return $self->redirect_to_error if !$to_template_edit;
+
+    $self->stash( $to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common( $template, $msg ) );
 

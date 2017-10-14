@@ -30,11 +30,8 @@ sub show {
     my $to_template_show = $model->to_template_show;
 
     # パラメータの取得に失敗時はメニューへ
-    if ( !$to_template_show ) {
-        $self->flash( msg => '不正な入力' );
-        $self->redirect_to("/sanpo/menu");
-        return;
-    }
+    return $self->redirect_to_error if !$to_template_show;
+
     $self->stash( $to_template_show );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common('sanpo/pet/show') );
@@ -55,11 +52,8 @@ sub edit {
     my $to_template_edit = $model->to_template_edit;
 
     # パラメータの取得に失敗時はメニューへ
-    if ( !$to_template_edit ) {
-        $self->flash( msg => '不正な入力' );
-        $self->redirect_to("/sanpo/menu");
-        return;
-    }
+    return $self->redirect_to_error if !$to_template_edit;
+
     $self->stash( $to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common($template) );
@@ -131,11 +125,8 @@ sub update {
     my $to_template_edit = $model->to_template_edit;
 
     # パラメータの取得に失敗時はメニューへ
-    if ( !$to_template_edit ) {
-        $self->flash( msg => '不正な入力' );
-        $self->redirect_to("/sanpo/menu");
-        return;
-    }
+    return $self->redirect_to_error if !$to_template_edit;
+
     $self->stash( $to_template_edit );
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common( $template, $msg ) );

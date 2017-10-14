@@ -13,6 +13,14 @@ sub render_fillin {
     return;
 }
 
+# テンプレートに表示するパラメーター取得に失敗
+sub redirect_to_error {
+    my $self = shift;
+    $self->flash( msg => '不正な入力' );
+    $self->redirect_to("/sanpo/menu");
+    return;
+}
+
 1;
 
 __END__

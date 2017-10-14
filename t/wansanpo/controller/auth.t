@@ -9,19 +9,15 @@ my $t = $test_util->init;
 
 # ルーティング (ステータスのみ)
 subtest 'router' => sub {
-
-    # 302リダイレクトレスポンスの許可
+    my $dummy_id = 9999;
     $t->ua->max_redirects(1);
-
-    $t->get_ok('/auth/entry')->status_is(200);
-    $t->post_ok('/auth/entry')->status_is(200);
-    $t->get_ok('/auth/login')->status_is(200);
-    $t->post_ok('/auth/login')->status_is(200);
-    $t->post_ok('/auth/logout')->status_is(200);
-    $t->get_ok('/auth/1/edit')->status_is(200);
-    $t->post_ok('/auth/1/update')->status_is(200);
-
-    # 必ず戻す
+    $t->get_ok("/auth/entry")->status_is(200);
+    $t->post_ok("/auth/entry")->status_is(200);
+    $t->get_ok("/auth/login")->status_is(200);
+    $t->post_ok("/auth/login")->status_is(200);
+    $t->post_ok("/auth/logout")->status_is(200);
+    $t->get_ok("/auth/$dummy_id/edit")->status_is(200);
+    $t->post_ok("/auth/$dummy_id/update")->status_is(200);
     $t->ua->max_redirects(0);
 };
 
