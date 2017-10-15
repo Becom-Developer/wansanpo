@@ -30,6 +30,7 @@ subtest 'show' => sub {
         # ログイン中はユーザーID取得できる
         my $profile    = $t->app->login_user->fetch_profile;
         my $profile_id = $profile->id;
+        my $user_id    = $profile->user_id;
         my $url        = "/sanpo/profile/$profile_id";
         $t->get_ok($url)->status_is(200);
 
@@ -41,7 +42,7 @@ subtest 'show' => sub {
         $t->element_exists("a[href=/sanpo/pet/create]");
         $t->element_exists("a[href=/sanpo/profile/search]");
         $t->element_exists("a[href=/sanpo/menu]");
-        $t->element_exists_not("a[href=/sanpo/message/create/$profile_id]");
+        $t->element_exists_not("a[href=/sanpo/message/create/$user_id]");
     };
 
     # ログアウトをする
@@ -59,6 +60,7 @@ subtest 'show' => sub {
         my $user = $t->app->test_db->teng->single( 'user', +{ id => 1 } );
         my $profile = $user->fetch_profile;
         my $profile_id = $profile->id;
+        my $user_id    = $profile->user_id;
 
         my $url = "/sanpo/profile/$profile_id";
         $t->get_ok($url)->status_is(200);
@@ -71,7 +73,7 @@ subtest 'show' => sub {
         $t->element_exists_not("a[href=/sanpo/pet/create]");
         $t->element_exists("a[href=/sanpo/profile/search]");
         $t->element_exists("a[href=/sanpo/menu]");
-        $t->element_exists("a[href=/sanpo/message/create/$profile_id]");
+        $t->element_exists("a[href=/sanpo/message/create/$user_id]");
     };
     $test_util->logout($t);
 };

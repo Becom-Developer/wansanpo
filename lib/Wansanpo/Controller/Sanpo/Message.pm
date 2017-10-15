@@ -30,19 +30,19 @@ sub create {
     my $self = shift;
 
     my $params = +{
-        from_user_id      => $self->login_user->id,
-        firend_profile_id => $self->stash->{id},
+        from_user_id => $self->login_user->id,
+        to_user_id   => $self->stash->{id},
     };
-
     my $model = $self->model->sanpo->message->req_params($params);
     my $to_template_create = $model->to_template_create;
 
     # パラメータの取得に失敗時はメニューへ
     return $self->redirect_to_error if !$to_template_create;
 
+    my $template = 'sanpo/message/create';
     $self->stash($to_template_create);
-    $self->stash( $self->_template_common('sanpo/message/create') );
-    $self->render;
+    $self->stash( $self->_template_common($template) );
+    $self->render_fillin( $template, $params );
     return;
 }
 

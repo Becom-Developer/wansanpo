@@ -124,7 +124,7 @@
             <!-- BUTTON BLOCK -->
             <div class="showback">
               <h4><i class="fa fa-angle-right"></i> このユーザーへメッセージを送る</h4>
-              <a href="/sanpo/message/create/<%= $profile->{id} %>" role="button" type="" class="btn btn-success btn-lg btn-block">メッセージを送る</a>
+              <a href="/sanpo/message/create/<%= $profile->{user_id} %>" role="button" type="" class="btn btn-success btn-lg btn-block">メッセージを送る</a>
             </div>
             <!--/showback -->
             % }

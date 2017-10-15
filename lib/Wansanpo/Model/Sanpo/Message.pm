@@ -200,17 +200,17 @@ sub to_template_create {
         profile => $from_user->fetch_profile->get_columns,
     };
 
-    # 送り先の情報 指定された profile_id
+    # 送り先の情報 指定された user_id
     $cond = +{
-        id      => $self->req_params->{firend_profile_id},
+        id      => $self->req_params->{to_user_id},
         deleted => 0,
     };
-    my $to_profile = $self->db->teng->single( 'profile', $cond );
-    return if !$to_profile;
+    my $to_user = $self->db->teng->single( 'user', $cond );
+    return if !$to_user;
 
     my $to_user_hash_ref = +{
-        user    => $to_profile->fetch_user->get_columns,
-        profile => $to_profile->get_columns,
+        user    => $to_user->get_columns,
+        profile => $to_user->fetch_profile->get_columns,
     };
 
     return +{
