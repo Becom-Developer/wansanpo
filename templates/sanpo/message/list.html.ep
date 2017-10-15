@@ -31,8 +31,8 @@
             <h4 class="mb"><i class="fa fa-angle-right"></i> メッセージ履歴</h4>
               <!-- BUTTON BLOCK -->
               <div class="showback">
-                <p><%= $firend_profile->{name} %>(<%= $firend_profile->{nickname} %>)</p>
-                <a href="/sanpo/message/create/<%= $firend_profile->{id} %>" role="button" type="" class="btn btn-default btn-lg btn-block">新規メッセージ</a>
+                <p><%= $msg_friend->{profile}->{name} %>(<%= $msg_friend->{profile}->{nickname} %>)</p>
+                <a href="/sanpo/message/create/<%= $msg_friend->{user}->{id} %>" role="button" type="" class="btn btn-default btn-lg btn-block">新規メッセージ</a>
               </div>
               <!--/showback -->
               % for my $message (@{$messages}) {

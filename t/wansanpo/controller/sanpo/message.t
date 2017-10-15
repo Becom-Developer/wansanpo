@@ -198,9 +198,8 @@ subtest 'get_ok /sanpo/message/list/:id list' => sub {
         my $friend_user    = $t->app->test_db->teng->single( 'user',
             +{ id => $friend_user_id } );
 
-        my $friend_profile_id = $friend_user->fetch_profile->id;
-        my $list_url          = "/sanpo/message/list/$friend_profile_id";
-        my $create_url        = "/sanpo/message/create/$friend_profile_id";
+        my $list_url   = "/sanpo/message/list/$friend_user_id";
+        my $create_url = "/sanpo/message/create/$friend_user_id";
 
         $t->get_ok($list_url)->status_is(200);
 

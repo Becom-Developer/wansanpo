@@ -131,43 +131,41 @@ sub to_template_search {
 sub to_template_list {
     my $self = shift;
 
-    my $cond = +{ id => $self->req_params->{user_id}, deleted => 0, };
-    my $row = $self->db->teng->single( 'user', $cond, );
-
     # ログイン者の情報
-    my $user_profile  = $row->fetch_profile;
-    my $login_user_id = $row->id;
+    my $cond = +{ id => $self->req_params->{user_id}, deleted => 0, };
+    my $login_user_row = $self->db->teng->single( 'user', $cond, );
 
     # 相手の情報
-    $cond = +{ id => $self->req_params->{id}, deleted => 0, };
-    my $firend_profile = $self->db->teng->single( 'profile', $cond, );
+    $cond = +{ id => $self->req_params->{friend_user_id}, deleted => 0, };
+    my $firend_user_row = $self->db->teng->single( 'user', $cond, );
 
     # 無効なユーザーの場合は終了
-    return if !$firend_profile;
+    return if !$firend_user_row;
 
-    my $firend_profile_hash = $firend_profile->get_columns;
-    my $firend_user_id      = $firend_profile->user_id;
+    my $msg_friend = +{
+        user    => $firend_user_row->get_columns,
+        profile => $firend_user_row->fetch_profile->get_columns,
+    };
 
     # メッセージ履歴を取得
-    my $rows = $row->search_msg_history($firend_user_id);
+    my $message_rows
+        = $login_user_row->search_msg_history( $firend_user_row->id );
 
     # 名前情報を含める
     my $message_data = [];
-    for my $row ( @{$rows} ) {
-        my $to_user         = $row->fetch_to_user_row;
-        my $to_user_profile = $to_user->fetch_profile;
-
-        my $from_user         = $row->fetch_from_user_row;
+    for my $message_row ( @{$message_rows} ) {
+        my $to_user           = $message_row->fetch_to_user_row;
+        my $to_user_profile   = $to_user->fetch_profile;
+        my $from_user         = $message_row->fetch_from_user_row;
         my $from_user_profile = $from_user->fetch_profile;
 
         my $is_from_msg;
-        if ( $row->from_user_id eq $login_user_id ) {
+        if ( $message_row->from_user_id eq $login_user_row->id ) {
             $is_from_msg = 1;
         }
-        push @{$message_data},
-            +{
+        my $data = +{
             is_from_msg => $is_from_msg,
-            message     => $row->get_columns,
+            message     => $message_row->get_columns,
             to_user     => +{
                 user    => $to_user->get_columns,
                 profile => $to_user_profile->get_columns,
@@ -176,11 +174,12 @@ sub to_template_list {
                 user    => $from_user->get_columns,
                 profile => $from_user_profile->get_columns,
             },
-            };
+        };
+        push @{$message_data}, $data;
     }
     return +{
-        firend_profile => $firend_profile_hash,
-        messages       => $message_data,
+        msg_friend => $msg_friend,
+        messages   => $message_data,
     };
 }
 

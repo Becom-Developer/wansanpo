@@ -86,8 +86,8 @@ sub list {
     my $self = shift;
 
     my $params = +{
-        id      => $self->stash->{id},
-        user_id => $self->login_user->id,
+        friend_user_id => $self->stash->{id},
+        user_id        => $self->login_user->id,
     };
 
     my $model            = $self->model->sanpo->message->req_params($params);
