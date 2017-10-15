@@ -39,7 +39,7 @@ sub is_first_login {
 }
 
 # メッセージ履歴のあるユーザー情報を取得
-sub search_msg_friend_profile {
+sub search_msg_friend_user {
     my $self = shift;
 
     my $msg_friend_ids = [];
@@ -63,10 +63,10 @@ sub search_msg_friend_profile {
     my $collection = Mojo::Collection->new( @{$msg_friend_ids} );
     my $ids        = $collection->uniq->to_array;
 
-    # プロフィール情報を取得
-    $cond = +{ user_id => $ids, deleted => 0, };
-    my @profile_rows = $self->handle->search( 'profile', $cond );
-    return \@profile_rows;
+    # ユーザー情報取得
+    $cond = +{ id => $ids, deleted => 0, };
+    my @user_rows = $self->handle->search( 'user', $cond );
+    return \@user_rows;
 }
 
 # メッセージ履歴を取得

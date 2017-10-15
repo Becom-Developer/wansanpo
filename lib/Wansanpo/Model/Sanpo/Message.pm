@@ -116,9 +116,16 @@ sub to_template_search {
     my $row  = $self->db->teng->single( 'user', $cond, );
 
     # メッセージ履歴のあるユーザー情報を取得
-    my $rows = $row->search_msg_friend_profile;
-    my $hash_ref = [ map { $_->get_columns } @{$rows} ];
-    return +{ profiles => $hash_ref, };
+    my $rows = $row->search_msg_friend_user;
+    my $msg_friends;
+    for my $row ( @{$rows} ) {
+        push @{$msg_friends},
+            +{
+            user    => $row->get_columns,
+            profile => $row->fetch_profile->get_columns,
+            };
+    }
+    return +{ msg_friends => $msg_friends };
 }
 
 sub to_template_list {

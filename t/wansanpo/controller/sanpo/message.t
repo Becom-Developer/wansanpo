@@ -158,10 +158,9 @@ subtest 'post_ok /sanpo/message/:id/update update' => sub {
 subtest 'get_ok /sanpo/message/search search' => sub {
     $test_util->login($t);
     subtest 'template' => sub {
-
         my $url = "/sanpo/message/search";
         $t->get_ok($url)->status_is(200);
-        my $rows = $t->app->login_user->search_msg_friend_profile;
+        my $rows = $t->app->login_user->search_msg_friend_user;
         is( scalar @{$rows}, 1, 'count' );
 
         # 画面確認
@@ -169,8 +168,8 @@ subtest 'get_ok /sanpo/message/search search' => sub {
 
         # メッセージ一覧画面へのリンクボタン
         for my $row ( @{$rows} ) {
-            my $id = $row->id;
-            $t->element_exists("a[href=/sanpo/message/list/$id]");
+            my $user_id = $row->id;
+            $t->element_exists("a[href=/sanpo/message/list/$user_id]");
         }
     };
     subtest 'fail' => sub {
