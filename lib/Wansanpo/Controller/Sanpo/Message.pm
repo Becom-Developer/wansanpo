@@ -49,7 +49,29 @@ sub create {
 # メッセージ新規登録実行
 sub store {
     my $self = shift;
-    $self->render( text => 'store' );
+
+    my $params = $self->req->params->to_hash;
+    my $model  = $self->model->sanpo->message->req_params($params);
+    my $to_template_create = $model->to_template_create;
+
+    # パラメータの取得に失敗時はメニューへ
+    return $self->redirect_to_error if !$to_template_create;
+
+    my $msg      = '登録できません';
+    my $template = 'sanpo/message/create';
+    $self->stash($to_template_create);
+    $self->stash( $self->_template_common( $template, $msg ) );
+
+    # 簡易的なバリデート
+    return $self->render_fillin( $template, $params )
+        if !$model->easy_validate;
+
+    # 登録実行
+    my $friend_user_id = $model->store;
+
+    # 書き込み保存終了、リダイレクト終了
+    $self->flash( msg => '登録完了しました' );
+    $self->redirect_to("/sanpo/message/list/$friend_user_id");
     return;
 }
 

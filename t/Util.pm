@@ -85,7 +85,17 @@ sub get_input_val {
 
     # input radio 取得
     my $radio_params = $self->_get_input_radio_val( $dom, $form );
-    my $params = +{ %{$text_params}, %{$radio_params}, };
+
+    # input hidden 取得
+    my $hidden_params = $self->_get_input_hidden_val( $dom, $form );
+
+    # textarea 取得
+    my $textarea_params = $self->_get_textarea_val( $dom, $form );
+
+    my $params = +{
+        %{$text_params},   %{$radio_params},
+        %{$hidden_params}, %{$textarea_params},
+    };
     return $params;
 }
 
@@ -101,6 +111,10 @@ sub input_val_in_dom {
 
     # input radio
     $dom = $self->_radio_val_in_dom( $dom, $form, $data );
+
+    # textarea
+    $dom = $self->_textarea_val_in_dom( $dom, $form, $data );
+
     return $dom;
 }
 
@@ -137,6 +151,36 @@ sub _get_input_radio_val {
     return $params;
 }
 
+# input hidden 入力フォームの値を取得
+sub _get_input_hidden_val {
+    my $self = shift;
+    my $dom  = shift;
+    my $form = shift;
+
+    my $params = +{};
+    for my $e ( $dom->find("$form input[type=hidden]")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        $params->{$name} = $e->val;
+    }
+    return $params;
+}
+
+# textarea 入力フォームの値を取得
+sub _get_textarea_val {
+    my $self = shift;
+    my $dom  = shift;
+    my $form = shift;
+
+    my $params = +{};
+    for my $e ( $dom->find("$form textarea")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        $params->{$name} = $e->val;
+    }
+    return $params;
+}
+
 # input text の name を全て取得
 sub _get_input_text_names {
     my $self = shift;
@@ -166,6 +210,21 @@ sub _get_input_radio_names {
         if ( $tag =~ /checked/ ) {
             push @{$names}, $name;
         }
+    }
+    return $names;
+}
+
+# textarea の name を全て取得
+sub _get_textarea_names {
+    my $self = shift;
+    my $dom  = shift;
+    my $form = shift;
+
+    my $names;
+    for my $e ( $dom->find("$form textarea")->each ) {
+        my $name = $e->attr('name');
+        next if !$name;
+        push @{$names}, $name;
     }
     return $names;
 }
@@ -205,6 +264,21 @@ sub _radio_val_in_dom {
         my $val = $data->{$name};
         $dom->at("$form input[name=$name][value=$val]")
             ->attr( 'checked' => undef );
+    }
+    return $dom;
+}
+
+# textarea 値の埋め込み
+sub _textarea_val_in_dom {
+    my $self = shift;
+    my $dom  = shift;
+    my $form = shift;
+    my $data = shift;
+
+    my $names = $self->_get_textarea_names( $dom, $form );
+    for my $name ( @{$names} ) {
+        my $val = $data->{$name};
+        $dom->at("$form textarea[name=$name]")->content($val);
     }
     return $dom;
 }

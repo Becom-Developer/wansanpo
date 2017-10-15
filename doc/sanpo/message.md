@@ -34,6 +34,9 @@ sanpo/message - wansanpo メッセージ
 ## POST - `/sanpo/message` - store - メッセージ新規登録実行
 
 ```
+メッセージ情報を新規登録
+メッセージが空でも登録する
+登録完了後、送ったユーザーのメッセージリスト画面に遷移
 ```
 
 ## GET - `/sanpo/message/:id/edit` - edit - メッセージを編集する画面

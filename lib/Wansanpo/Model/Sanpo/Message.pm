@@ -13,15 +13,14 @@ Wansanpo::Model::Sanpo::Message - コントローラーモデル
 
 has [qw{}];
 
-# # 簡易バリデート
-# sub easy_validate {
-#     my $self   = shift;
-#     my $params = $self->req_params;
-#     return if !$params->{type};
-#     return if !$params->{name};
-#     return if !$params->{gender};
-#     return 1;
-# }
+# 簡易バリデート
+sub easy_validate {
+    my $self   = shift;
+    my $params = $self->req_params;
+    return if !$params->{from_user_id};
+    return if !$params->{to_user_id};
+    return 1;
+}
 
 # # ログイン者であることの確認
 # sub is_login_user {
@@ -40,22 +39,20 @@ has [qw{}];
 #     return 1;
 # }
 
-# # 登録実行
-# sub store {
-#     my $self   = shift;
-#     my $master = $self->db->master;
-#     my $params = +{
-#         user_id  => $self->req_params->{user_id},
-#         type     => $self->req_params->{type},
-#         name     => $self->req_params->{name},
-#         gender   => $self->req_params->{gender},
-#         icon     => '',
-#         birthday => $self->req_params->{birthday},
-#         note     => $self->req_params->{note},
-#         deleted  => $master->deleted->constant('NOT_DELETED'),
-#     };
-#     return $self->db->teng_fast_insert( 'message', $params );
-# }
+# 登録実行
+sub store {
+    my $self   = shift;
+    my $master = $self->db->master;
+    my $params = +{
+        to_user_id   => $self->req_params->{to_user_id},
+        from_user_id => $self->req_params->{from_user_id},
+        read         => $master->read->constant('UNREAD'),
+        message      => $self->req_params->{message},
+        deleted      => $master->deleted->constant('NOT_DELETED'),
+    };
+    $self->db->teng_fast_insert( 'message', $params );
+    return $params->{to_user_id};
+}
 
 # # 更新実行
 # sub update {

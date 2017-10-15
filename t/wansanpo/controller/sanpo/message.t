@@ -52,11 +52,9 @@ subtest 'get_ok /sanpo/message/create/:id create' => sub {
 
         my $list_url   = "/sanpo/message/list/$friend_user_id";
         my $create_url = "/sanpo/message/create/$friend_user_id";
-
-        my $name   = 'form_create';
-        my $action = '/sanpo/message';
-
-        my $menu_url = '/sanpo/menu';
+        my $name       = 'form_create';
+        my $action     = '/sanpo/message';
+        my $menu_url   = '/sanpo/menu';
 
         # メッセージリスト画面
         $t->get_ok($list_url)->status_is(200);
@@ -104,13 +102,10 @@ subtest 'get_ok /sanpo/message/create/:id create' => sub {
     subtest 'success' => sub {
         ok(1);
     };
-
-    # $test_util->logout($t);
 };
 
 # メッセージ新規登録実行
 subtest 'post_ok /sanpo/message store' => sub {
-    $test_util->login($t);
     subtest 'template' => sub {
         ok(1);
     };
@@ -118,9 +113,61 @@ subtest 'post_ok /sanpo/message store' => sub {
         ok(1);
     };
     subtest 'success' => sub {
-        ok(1);
+        my $user_id = 2;
+        $test_util->login( $t, $user_id );
+
+        # user 3 とのやりとり
+        my $friend_user_id = 3;
+        my $friend_user    = $t->app->test_db->teng->single( 'user',
+            +{ id => $friend_user_id } );
+
+        my $list_url   = "/sanpo/message/list/$friend_user_id";
+        my $create_url = "/sanpo/message/create/$friend_user_id";
+        my $name       = 'form_create';
+        my $action     = '/sanpo/message';
+        my $menu_url   = '/sanpo/menu';
+
+        # メッセージリスト画面
+        $t->get_ok($list_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/message/list\E}, );
+        $t->element_exists("a[href=$create_url]");
+
+        # 入力画面
+        $t->get_ok($create_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/message/create\E}, );
+
+        # form
+        my $form = "form[name=$name][method=post][action=$action]";
+        $t->element_exists($form);
+
+        my $dom        = $t->tx->res->dom;
+        my $action_url = $dom->at($form)->attr('action');
+
+        # 入力データーの元
+        my $msg_hash = +{ message => 'test msg です', };
+
+        # dom に 値を埋め込み
+        $dom = $test_util->input_val_in_dom( $dom, $form, $msg_hash );
+
+        # input val 取得
+        my $params = $test_util->get_input_val( $dom, $form );
+
+        # 実行
+        $t->post_ok( $action_url => form => $params )->status_is(302);
+
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/message/list\E}, );
+        $t->content_like(qr{\Q<b>登録完了しました</b>\E});
+
+        # db 確認
+        my $row = $t->app->test_db->teng->single( 'message',
+            +{ message => $msg_hash->{message} } );
+        is( $row->to_user_id,   $params->{to_user_id},   'to_user_id' );
+        is( $row->from_user_id, $params->{from_user_id}, 'from_user_id' );
+        $test_util->logout($t);
     };
-    $test_util->logout($t);
 };
 
 # メッセージを編集する画面

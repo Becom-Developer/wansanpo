@@ -108,6 +108,23 @@ sub gender_pet {
     return $self;
 }
 
+# read 既読フラグ (例: 0: 未読, 1: 既読)
+sub read {
+    my $self = shift;
+    my $hash = +{
+        0 => '未読',
+        1 => '既読',
+    };
+
+    my $constant = +{
+        UNREAD => 0,
+        READ   => 1,
+    };
+    $self->master_hash($hash);
+    $self->master_constant_hash($constant);
+    return $self;
+}
+
 # 単語から id を求める
 sub word_id {
     my $self = shift;
