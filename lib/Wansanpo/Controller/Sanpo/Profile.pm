@@ -79,6 +79,12 @@ sub update {
     my $self   = shift;
     my $params = $self->req->params->to_hash;
 
+    # アイコンアップデート
+    if ( $self->req->upload('icon') ) {
+        $self->_update_icon;
+        return;
+    }
+
     $params->{id} = $self->stash->{id};
     my $model            = $self->model->sanpo->profile->req_params($params);
     my $msg              = '更新できません';
@@ -102,6 +108,27 @@ sub update {
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'ユーザー更新完了しました' );
+    $self->redirect_to("/sanpo/profile/$update_id");
+    return;
+}
+
+# アイコンアップデート
+sub _update_icon {
+    my $self = shift;
+    my $icon = $self->req->upload('icon');
+
+    # 保存先のパス
+
+    # 新しいファイル名
+
+    # ファイルコピー
+
+    # ファイル名DB更新
+
+    my $update_id = $self->stash->{id};
+
+    # 書き込み保存終了、リダイレクト終了
+    $self->flash( msg => 'アイコンを更新しました' );
     $self->redirect_to("/sanpo/profile/$update_id");
     return;
 }

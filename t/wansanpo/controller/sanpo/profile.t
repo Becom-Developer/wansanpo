@@ -32,7 +32,13 @@ subtest 'show' => sub {
         my $profile_id = $profile->id;
         my $user_id    = $profile->user_id;
         my $url        = "/sanpo/profile/$profile_id";
+        my $update_url = "/sanpo/profile/$profile_id/update";
         $t->get_ok($url)->status_is(200);
+
+        # 画像アップロード
+        my $icon_form
+            = "form[name=icon_update][method=post][enctype=multipart/form-data][action=$update_url]";
+        $t->element_exists($icon_form);
 
         # 主な部分のみ
         # ボタン確認 編集画面, 検索, メニュー
@@ -210,6 +216,61 @@ subtest 'update' => sub {
         # db 確認
         my $row = $teng->single( 'profile', +{ id => $profile_id } );
         is( $row->name, $test_name, 'name' );
+    };
+
+    subtest 'success icon' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $teng       = $t->app->test_db->teng;
+        my $profile_id = $t->app->login_user->fetch_profile->id;
+        my $edit_url   = "/sanpo/profile/$profile_id/edit";
+        my $show_url   = "/sanpo/profile/$profile_id";
+
+        # 詳細画面
+        $t->get_ok($show_url)->status_is(200);
+
+        # 画像アップロード
+        my $dom        = $t->tx->res->dom;
+        my $form       = 'form[name=icon_update]';
+        my $update_url = $dom->at($form)->attr('action');
+        my $type       = $dom->at($form)->attr('enctype');
+
+        # # アップロードファイル取得
+        # my $file    = './pet.t';
+        # my $headers = +{ 'Content-Type' => $type };
+        # my $upload  = +{ icon => +{ file => $file, }, };
+
+        # # warn dumper $headers;
+
+        # $t->post_ok( $update_url => $headers => form => $upload );
+
+   # # Force "multipart/form-data"
+   # my $headers = {'Content-Type' => 'multipart/form-data'};
+   # my $tx = $t->tx(POST => 'example.com' => $headers => form => {a => 'b'});
+
+        # # input val 取得
+        # my $params = $test_util->get_input_val( $dom, $form );
+
+        # # 名前更新
+        # my $test_name = 'sample_name';
+        # $params->{name} = $test_name;
+
+        # # 更新実行
+        # $t->post_ok( $update_url => form => $params )->status_is(302);
+
+        # # Test file upload
+        # my $upload = {foo => {content => 'bar', filename => 'baz.txt'}};
+        # $t->post_ok('/upload' => form => $upload)->status_is(200);
+
+      # # 画面確認
+      # my $location_url = $t->tx->res->headers->location;
+      # $t->get_ok($location_url)->status_is(200);
+      # $t->text_like( 'html head title', qr{\Qwansanpo/profile/show\E}, );
+      # $t->content_like(qr{\Q<b>ユーザー更新完了しました</b>\E});
+
+        # # db 確認
+        # my $row = $teng->single( 'profile', +{ id => $profile_id } );
+        # is( $row->name, $test_name, 'name' );
     };
 
     $test_util->logout($t);
