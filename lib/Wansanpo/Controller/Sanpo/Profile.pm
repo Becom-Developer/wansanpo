@@ -1,5 +1,6 @@
 package Wansanpo::Controller::Sanpo::Profile;
 use Mojo::Base 'Wansanpo::Controller::Sanpo';
+use Wansanpo::Util qw{easy_filename};
 
 # テンプレ用共通スタッシュ
 sub _template_common {
