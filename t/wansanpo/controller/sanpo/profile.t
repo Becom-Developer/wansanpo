@@ -235,18 +235,16 @@ subtest 'update' => sub {
         my $update_url = $dom->at($form)->attr('action');
         my $type       = $dom->at($form)->attr('enctype');
 
-        # # アップロードファイル取得
-        # my $file    = './pet.t';
-        # my $headers = +{ 'Content-Type' => $type };
-        # my $upload  = +{ icon => +{ file => $file, }, };
+        # アップロードファイル取得
 
-        # # warn dumper $headers;
+        # ファイルを捕まえる
+        my $home = $t->app->home;
+        my $path =  $home->rel_file('public/img/icon/admin.jpg');
+        my $file    = $path->to_string;
+        my $headers = +{ 'Content-Type' => $type };
+        my $upload  = +{ icon => +{ file => $file, }, };
 
-        # $t->post_ok( $update_url => $headers => form => $upload );
-
-   # # Force "multipart/form-data"
-   # my $headers = {'Content-Type' => 'multipart/form-data'};
-   # my $tx = $t->tx(POST => 'example.com' => $headers => form => {a => 'b'});
+        $t->post_ok( $update_url => $headers => form => $upload );
 
         # # input val 取得
         # my $params = $test_util->get_input_val( $dom, $form );
