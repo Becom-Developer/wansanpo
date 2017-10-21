@@ -3,11 +3,10 @@ use Mojo::Base 'Mojolicious::Command';
 
 has description => 'Wansanpo create upload sample data';
 has usage => sub { encode( shift->extract_usage ) };
-has [qw{csv_files_delete_header index_sample_data sqlite_cmd}];
+has [qw{}];
 
 sub run {
     my $self = shift;
-    my $conf = $self->app->config;
 
     # サンプルデータのパス
     my $path       = $self->app->home->path('doc/img/icon');

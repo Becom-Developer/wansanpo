@@ -40,6 +40,17 @@ sub update {
     return $update_id;
 }
 
+# アイコン更新実行
+sub update_icon {
+    my $self       = shift;
+    my $profile_id = $self->req_params->{id};
+    my $params     = +{ %{ $self->req_params }, };
+    delete $params->{id};
+    my $cond = +{ id => $profile_id };
+    my $update_id = $self->db->teng_update( 'profile', $params, $cond );
+    return $update_id;
+}
+
 # ログイン者であることの確認
 sub is_login_user {
     my $self       = shift;

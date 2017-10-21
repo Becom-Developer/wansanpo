@@ -1,6 +1,6 @@
 package Wansanpo::Controller::Sanpo::Profile;
 use Mojo::Base 'Wansanpo::Controller::Sanpo';
-use Wansanpo::Util qw{easy_filename};
+use Wansanpo::Util qw{easy_filename has_suffix_error};
 
 # テンプレ用共通スタッシュ
 sub _template_common {
@@ -115,20 +115,43 @@ sub update {
 
 # アイコンアップデート
 sub _update_icon {
-    my $self = shift;
-    my $icon = $self->req->upload('icon');
-
-    # 保存先のパス
-
-    # 新しいファイル名
+    my $self      = shift;
+    my $conf      = $self->app->config;
+    my $icon      = $self->req->upload('icon');
+    my $update_id = $self->stash->{id};
 
     # アップロードされたファイルの拡張子の判定
+    if ( has_suffix_error( $icon->filename ) ) {
+        $self->flash( msg => '拡張子が不正' );
+        $self->redirect_to("/sanpo/profile/$update_id");
+        return;
+    }
+
+    # 保存先のパス public/var/icon
+    my $upload_path = $conf->{upload}->{icon};
+
+    # 新しいファイル名
+    my $save_filename = easy_filename( $icon->filename );
+
+    # コピー先 (存在しない場合は作成)
+    my $path = $self->app->home->path($upload_path);
+    $path = $path->make_path->child($save_filename);
 
     # ファイルコピー
+    $icon->move_to( $path->to_string );
+
+    # テスト時は削除
+    if ( $self->app->mode eq 'testing' ) {
+        unlink $path->to_string;
+    }
 
     # ファイル名DB更新
-
-    my $update_id = $self->stash->{id};
+    my $params = +{
+        id   => $update_id,
+        icon => $save_filename,
+    };
+    my $model = $self->model->sanpo->profile->req_params($params);
+    $model->update_icon;
 
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'アイコンを更新しました' );

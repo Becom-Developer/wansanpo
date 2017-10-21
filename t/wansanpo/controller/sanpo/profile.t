@@ -222,7 +222,9 @@ subtest 'update' => sub {
 
         # ログイン中はユーザーID取得できる
         my $teng       = $t->app->test_db->teng;
-        my $profile_id = $t->app->login_user->fetch_profile->id;
+        my $profile    = $t->app->login_user->fetch_profile;
+        my $profile_id = $profile->id;
+        my $icon_org   = $profile->icon;
         my $edit_url   = "/sanpo/profile/$profile_id/edit";
         my $show_url   = "/sanpo/profile/$profile_id";
 
@@ -238,37 +240,23 @@ subtest 'update' => sub {
         # アップロードファイル取得
 
         # ファイルを捕まえる
-        my $home = $t->app->home;
-        my $path =  $home->rel_file('public/img/icon/admin.jpg');
+        my $home    = $t->app->home;
+        my $path    = $home->rel_file('public/img/icon/admin.jpg');
         my $file    = $path->to_string;
         my $headers = +{ 'Content-Type' => $type };
         my $upload  = +{ icon => +{ file => $file, }, };
 
         $t->post_ok( $update_url => $headers => form => $upload );
 
-        # # input val 取得
-        # my $params = $test_util->get_input_val( $dom, $form );
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/profile/show\E}, );
+        $t->content_like(qr{\Q<b>アイコンを更新しました</b>\E});
 
-        # # 名前更新
-        # my $test_name = 'sample_name';
-        # $params->{name} = $test_name;
-
-        # # 更新実行
-        # $t->post_ok( $update_url => form => $params )->status_is(302);
-
-        # # Test file upload
-        # my $upload = {foo => {content => 'bar', filename => 'baz.txt'}};
-        # $t->post_ok('/upload' => form => $upload)->status_is(200);
-
-      # # 画面確認
-      # my $location_url = $t->tx->res->headers->location;
-      # $t->get_ok($location_url)->status_is(200);
-      # $t->text_like( 'html head title', qr{\Qwansanpo/profile/show\E}, );
-      # $t->content_like(qr{\Q<b>ユーザー更新完了しました</b>\E});
-
-        # # db 確認
-        # my $row = $teng->single( 'profile', +{ id => $profile_id } );
-        # is( $row->name, $test_name, 'name' );
+        # db 確認
+        my $row = $teng->single( 'profile', +{ id => $profile_id } );
+        isnt( $row->icon, $icon_org, 'icon' );
     };
 
     $test_util->logout($t);
