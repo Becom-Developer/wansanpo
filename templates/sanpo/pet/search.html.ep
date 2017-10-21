@@ -37,7 +37,7 @@
               <div class="col-lg-4 col-md-4 col-sm-4 mb">
                 % if ($row->{id}) {
                 <div class="content-panel pn">
-                  <div id="profile-01" style="background: url(/img/icon/<%= $row->{icon} %>) no-repeat center center;"  >
+                  <div id="profile-01" style="background: url(/var/icon/<%= $row->{icon} %>) no-repeat center center;"  >
                     <h3 style="color: lavenderblush;"><%= $row->{type} %></h3>
                     <h6 style="color: lavenderblush;"><%= $row->{name} %></h6>
                   </div>

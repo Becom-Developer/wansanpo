@@ -1,3 +1,5 @@
 local/
 log/
 db/*.db
+public/var/
+.DS_Store

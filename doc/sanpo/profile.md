@@ -32,6 +32,7 @@ TODO
     例: `public/var/icon/20171018123044_0281.jpg`
     `public/var/` は git 管理からはずす
     サンプル画像データを `public/var` にコピーするコマンドをつくっておく
+    generate_upload_sample
 ```
 
 ## GET - `/sanpo/profile/:id/edit` - ユーザー情報編集画面
