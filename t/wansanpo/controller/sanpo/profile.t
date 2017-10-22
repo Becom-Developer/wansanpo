@@ -225,7 +225,6 @@ subtest 'update' => sub {
         my $profile    = $t->app->login_user->fetch_profile;
         my $profile_id = $profile->id;
         my $icon_org   = $profile->icon;
-        my $edit_url   = "/sanpo/profile/$profile_id/edit";
         my $show_url   = "/sanpo/profile/$profile_id";
 
         # 詳細画面
@@ -241,7 +240,7 @@ subtest 'update' => sub {
 
         # ファイルを捕まえる
         my $home    = $t->app->home;
-        my $path    = $home->rel_file('public/img/icon/admin.jpg');
+        my $path    = $home->rel_file('t/img/icon/admin.jpg');
         my $file    = $path->to_string;
         my $headers = +{ 'Content-Type' => $type };
         my $upload  = +{ icon => +{ file => $file, }, };

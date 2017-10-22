@@ -26,13 +26,13 @@ sub show {
     my $model = $self->model->sanpo->pet->req_params($params);
 
     # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user = $model->is_login_user( $self->login_user->id );
+    my $is_login_user    = $model->is_login_user( $self->login_user->id );
     my $to_template_show = $model->to_template_show;
 
     # パラメータの取得に失敗時はメニューへ
     return $self->redirect_to_error if !$to_template_show;
 
-    $self->stash( $to_template_show );
+    $self->stash($to_template_show);
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common('sanpo/pet/show') );
     $self->render;
@@ -47,14 +47,14 @@ sub edit {
     my $model = $self->model->sanpo->pet->req_params($params);
 
     # ログイン者以外の場合は編集ボタンを表示しない
-    my $is_login_user = $model->is_login_user( $self->login_user->id );
-    my $template      = 'sanpo/pet/edit';
+    my $is_login_user    = $model->is_login_user( $self->login_user->id );
+    my $template         = 'sanpo/pet/edit';
     my $to_template_edit = $model->to_template_edit;
 
     # パラメータの取得に失敗時はメニューへ
     return $self->redirect_to_error if !$to_template_edit;
 
-    $self->stash( $to_template_edit );
+    $self->stash($to_template_edit);
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common($template) );
     my $pet_params = $model->to_template_edit->{pet};
@@ -117,17 +117,24 @@ sub search {
 sub update {
     my $self   = shift;
     my $params = $self->req->params->to_hash;
+
+    # アイコンアップデート
+    if ( $self->req->upload('icon') ) {
+        $self->_update_icon;
+        return;
+    }
+
     $params->{id} = $self->stash->{id};
-    my $model         = $self->model->sanpo->pet->req_params($params);
-    my $msg           = '更新できません';
-    my $is_login_user = $model->is_login_user( $self->login_user->id );
-    my $template      = 'sanpo/pet/edit';
+    my $model            = $self->model->sanpo->pet->req_params($params);
+    my $msg              = '更新できません';
+    my $is_login_user    = $model->is_login_user( $self->login_user->id );
+    my $template         = 'sanpo/pet/edit';
     my $to_template_edit = $model->to_template_edit;
 
     # パラメータの取得に失敗時はメニューへ
     return $self->redirect_to_error if !$to_template_edit;
 
-    $self->stash( $to_template_edit );
+    $self->stash($to_template_edit);
     $self->stash( is_login_user => $is_login_user );
     $self->stash( $self->_template_common( $template, $msg ) );
 
@@ -141,6 +148,29 @@ sub update {
     # 書き込み保存終了、リダイレクト終了
     $self->flash( msg => 'ペット更新完了しました' );
     $self->redirect_to("/sanpo/pet/$update_id");
+    return;
+}
+
+# アイコンアップデート
+sub _update_icon {
+    my $self         = shift;
+    my $update_id    = $self->stash->{id};
+    my $redirect_url = "/sanpo/pet/$update_id";
+
+    # icon アップロードアクション
+    my $save_filename = $self->upload_icon($redirect_url);
+
+    # ファイル名DB更新
+    my $params = +{
+        id   => $update_id,
+        icon => $save_filename,
+    };
+    my $model = $self->model->sanpo->pet->req_params($params);
+    $model->update_icon;
+
+    # 書き込み保存終了、リダイレクト終了
+    $self->flash( msg => 'アイコンを更新しました' );
+    $self->redirect_to($redirect_url);
     return;
 }
 

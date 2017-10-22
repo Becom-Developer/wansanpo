@@ -37,7 +37,7 @@
                 <%# アイコン画像 %>
                   <label class="col-lg-2 col-sm-2 control-label"></label>
                   <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
-                    <p class="form-control-static"><img class="img-responsive" src="" alt=""></p>
+                    <p class="form-control-static"><img class="img-responsive" src="/var/icon/<%= $pet->{icon} %>" alt=""></p>
                   </div>
               </div>
               <div class="form-group">

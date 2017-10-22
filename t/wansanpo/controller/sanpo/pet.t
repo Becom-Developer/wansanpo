@@ -33,10 +33,16 @@ subtest 'get /sanpo/pet/:id show' => sub {
         # ログイン中はユーザーID取得できる
         my $pet_rows = $t->app->login_user->search_pet;
         is( scalar @{$pet_rows}, 1, 'count' );
-        my $pet_row = shift @{$pet_rows};
-        my $pet_id  = $pet_row->id;
-        my $url     = "/sanpo/pet/$pet_id";
+        my $pet_row    = shift @{$pet_rows};
+        my $pet_id     = $pet_row->id;
+        my $url        = "/sanpo/pet/$pet_id";
+        my $update_url = "/sanpo/pet/$pet_id/update";
         $t->get_ok($url)->status_is(200);
+
+        # 画像アップロード
+        my $icon_form
+            = "form[name=icon_update][method=post][enctype=multipart/form-data][action=$update_url]";
+        $t->element_exists($icon_form);
 
         # 主な部分のみ
         # ボタン確認 編集画面, 検索, メニュー
@@ -327,6 +333,49 @@ subtest 'post /sanpo/pet/:id/update update' => sub {
         my $row = $teng->single( 'pet', +{ id => $pet_id } );
         is( $row->name, $test_name, 'name' );
     };
+
+    subtest 'success icon' => sub {
+
+        # ログイン中はユーザーID取得できる
+        my $teng     = $t->app->test_db->teng;
+        my $pet_rows = $t->app->login_user->search_pet;
+        is( scalar @{$pet_rows}, 1, 'count' );
+        my $pet_row  = shift @{$pet_rows};
+        my $pet_id   = $pet_row->id;
+        my $icon_org = $pet_row->icon;
+        my $show_url = "/sanpo/pet/$pet_id";
+
+        # 詳細画面
+        $t->get_ok($show_url)->status_is(200);
+
+        # 画像アップロード
+        my $dom        = $t->tx->res->dom;
+        my $form       = 'form[name=icon_update]';
+        my $update_url = $dom->at($form)->attr('action');
+        my $type       = $dom->at($form)->attr('enctype');
+
+        # アップロードファイル取得
+
+        # ファイルを捕まえる
+        my $home    = $t->app->home;
+        my $path    = $home->rel_file('t/img/icon/admin.jpg');
+        my $file    = $path->to_string;
+        my $headers = +{ 'Content-Type' => $type };
+        my $upload  = +{ icon => +{ file => $file, }, };
+
+        $t->post_ok( $update_url => $headers => form => $upload );
+
+        # 画面確認
+        my $location_url = $t->tx->res->headers->location;
+        $t->get_ok($location_url)->status_is(200);
+        $t->text_like( 'html head title', qr{\Qwansanpo/pet/show\E}, );
+        $t->content_like(qr{\Q<b>アイコンを更新しました</b>\E});
+
+        # db 確認
+        my $row = $teng->single( 'pet', +{ id => $pet_id } );
+        isnt( $row->icon, $icon_org, 'icon' );
+    };
+
     $test_util->logout($t);
 };
 

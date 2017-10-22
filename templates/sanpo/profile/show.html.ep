@@ -35,8 +35,10 @@
                 <label class="col-lg-2 col-sm-2 control-label text-center"></label>
                 <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
                   <p class="form-control-static"><img class="img-responsive" src="/var/icon/<%= $profile->{icon} %>" alt=""></p>
+                  % if ($is_login_user) {
                   <p><input type="file" name="icon"></p>
                   <button type="submit" class="btn btn-success btn-round btn-block">画像変更</button>
+                  % }
                 </div>
               </div>
             </form>

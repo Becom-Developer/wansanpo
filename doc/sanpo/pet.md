@@ -23,6 +23,14 @@ sanpo/pet - wansanpo ペット情報
 編集画面へのボタン
 ペット情報検索へのボタン
 アプリメニューへのボタン
+アイコン画像の登録機能
+変更はログイン者のペットのみ
+更新完了後は詳細画面にもどる
+アップされた画像ファイルは重複しない名前に変更して保存
+保存場所 `public/var/icon/`
+例: `public/var/icon/20171018123044_0281.jpg`
+`public/var/` は git 管理からはずす
+サンプル画像データを `public/var` にコピーするコマンド generate_upload_sample
 ```
 
 ## GET - `/sanpo/pet/:id/edit` - edit - ペット情報編集画面
@@ -32,8 +40,6 @@ sanpo/pet - wansanpo ペット情報
 編集実行のボタン
 ペット情報詳細へのボタン
 簡易的なバリデート
-TODO
-    アイコン画像の登録は別アクション
 ```
 
 ## GET - `/sanpo/pet/create` - create - ペット情報新規登録画面

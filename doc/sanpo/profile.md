@@ -24,15 +24,14 @@ sanpo/profile - wansanpo ユーザー情報
 ログイン者以外の詳細はメッセージを送るボタン
 ユーザー情報検索へのボタン
 アプリメニューへのボタン
-TODO
-    アイコン画像の登録は詳細画面から
-    更新完了後は詳細画面にもどる
-    アップされた画像ファイルは重複しない名前に変更して保存
-    保存場所 `public/var/icon/`
-    例: `public/var/icon/20171018123044_0281.jpg`
-    `public/var/` は git 管理からはずす
-    サンプル画像データを `public/var` にコピーするコマンドをつくっておく
-    generate_upload_sample
+アイコン画像の登録機能
+変更はログイン者のみ
+更新完了後は詳細画面にもどる
+アップされた画像ファイルは重複しない名前に変更して保存
+保存場所 `public/var/icon/`
+例: `public/var/icon/20171018123044_0281.jpg`
+`public/var/` は git 管理からはずす
+サンプル画像データを `public/var` にコピーするコマンド generate_upload_sample
 ```
 
 ## GET - `/sanpo/profile/:id/edit` - ユーザー情報編集画面
@@ -57,8 +56,6 @@ TODO
 ```
 ユーザー情報を更新
 更新完了後、更新したユーザー詳細画面へ遷移
-TODO
-    アイコン画像の更新は別のアクションにする
 ```
 
 ## POST - `/sanpo/profile/:id/remove` - ユーザー情報削除(退会)

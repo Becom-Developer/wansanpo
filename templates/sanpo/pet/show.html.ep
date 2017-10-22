@@ -29,14 +29,20 @@
         <div class="col-lg-12">
           <div class="form-panel">
             <h4 class="mb"><i class="fa fa-angle-right"></i> ペットプロフィール</h4>
-            <form class="form-horizontal style-form">
+            <form class="form-horizontal style-form" name="icon_update" method="post" action="/sanpo/pet/<%= $pet->{id} %>/update" enctype="multipart/form-data">
               <div class="form-group">
                 <%# アイコン画像 %>
-                <label class="col-lg-2 col-sm-2 control-label"></label>
+                <label class="col-lg-2 col-sm-2 control-label text-center"></label>
                 <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
                   <p class="form-control-static"><img class="img-responsive" src="/var/icon/<%= $pet->{icon} %>" alt=""></p>
+                  % if ($is_login_user) {
+                  <p><input type="file" name="icon"></p>
+                  <button type="submit" class="btn btn-success btn-round btn-block">画像変更</button>
+                  % }
                 </div>
               </div>
+            </form>
+            <form class="form-horizontal style-form">
               <div class="form-group">
                 <label class="col-lg-2 col-sm-2 control-label">ペットの種類</label>
                 <div class="col-lg-10">
