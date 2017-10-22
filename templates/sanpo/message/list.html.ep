@@ -33,7 +33,7 @@
               <div class="showback">
                 <p><b><%= $msg_friend->{profile}->{name} %>(<%= $msg_friend->{profile}->{nickname} %>)</b></p>
                 <a href="/sanpo/message/create/<%= $msg_friend->{user}->{id} %>" role="button" type="" class="btn btn-default btn-lg btn-block">
-                <img class="img-circle" src="/var/icon/<%= $msg_friend->{profile}->{icon} %>" width="35px" height="35px" align="">
+                <img class="img-circle" src="/var/icon/<%= $msg_friend->{profile}->{icon} %>" width="35px" height="35px" align="" alt="">
                 新規メッセージ
                 </a>
               </div>
@@ -43,12 +43,12 @@
               % if ($message->{is_from_msg}) {
               <div class="alert alert-success text-right">
               <b><%= $message->{from_user}->{profile}->{name} %>(<%= $message->{from_user}->{profile}->{nickname} %>)</b>
-              <img class="img-circle" src="/var/icon/<%= $message->{from_user}->{profile}->{icon} %>" width="35px" height="35px" align="">
+              <img class="img-circle" src="/var/icon/<%= $message->{from_user}->{profile}->{icon} %>" width="35px" height="35px" align="" alt="">
               <br><br><%= $message->{message}->{message} %></div>
               % } else {
               <%# 送られたメッセージ %>
               <div class="alert alert-default">
-              <img class="img-circle" src="/var/icon/<%= $message->{from_user}->{profile}->{icon} %>" width="35px" height="35px" align="">
+              <img class="img-circle" src="/var/icon/<%= $message->{from_user}->{profile}->{icon} %>" width="35px" height="35px" align="" alt="">
               <b><%= $message->{from_user}->{profile}->{name} %>(<%= $message->{from_user}->{profile}->{nickname} %>)</b>
               <br><br><%= $message->{message}->{message} %></div>
               % }

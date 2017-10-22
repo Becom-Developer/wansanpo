@@ -32,7 +32,7 @@
         <!-- First Member -->
         <div class="desc">
           <div class="thumb">
-            <img class="img-circle" src="/var/icon/<%= $msg_friend->{profile}->{icon} %>" width="35px" height="35px" align="">
+            <img class="img-circle" src="/var/icon/<%= $msg_friend->{profile}->{icon} %>" width="35px" height="35px" align="" alt="">
           </div>
           <div class="details">
             <p><a href="/sanpo/message/list/<%= $msg_friend->{user}->{id} %>"><%= $msg_friend->{profile}->{name} %></a><br/>
