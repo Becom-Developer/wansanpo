@@ -255,7 +255,7 @@ subtest 'get /sanpo/pet/search search' => sub {
 
 # ペット情報更新実行
 subtest 'post /sanpo/pet/:id/update update' => sub {
-    $t->app->commands->run('generate_db');
+    $t->app->commands->run('generateapp', 'sqlitedb');
     $test_util->login($t);
     subtest 'fail' => sub {
         my $teng     = $t->app->test_db->teng;

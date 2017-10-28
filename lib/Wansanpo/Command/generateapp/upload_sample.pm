@@ -2,7 +2,7 @@ package Wansanpo::Command::generateapp::upload_sample;
 use Mojo::Base 'Mojolicious::Command';
 
 has description => 'Wansanpo create upload sample data';
-has usage => sub { encode( shift->extract_usage ) };
+has usage => sub { shift->extract_usage };
 has [qw{}];
 
 sub run {

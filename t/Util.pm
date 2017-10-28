@@ -25,7 +25,7 @@ sub init {
     die 'not testing mode' if $t->app->mode ne 'testing';
 
     # テスト用DB初期化
-    $t->app->commands->run('generate_db');
+    $t->app->commands->run('generateapp', 'sqlitedb');
     $t->app->helper(
         test_db => sub { Wansanpo::DB->new( +{ conf => $t->app->config } ) }
     );
