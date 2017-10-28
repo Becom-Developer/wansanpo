@@ -15,6 +15,8 @@ sanpo/message - wansanpo メッセージ
 - GET - `/sanpo/message/list/:id` - list - メッセージ情報ユーザー個別に一覧表示
 - POST - `/sanpo/message/:id/remove` - remove - メッセージ情報削除
 
+# DESCRIPTION
+
 ## GET - `/sanpo/message/:id` - show - メッセージ詳細
 
 ```

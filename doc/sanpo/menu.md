@@ -8,4 +8,6 @@ sanpo/menu - wansanpo アプリメニュー
 
 - GET - `/sanpo/menu` - アプリメニュー画面
 
+# DESCRIPTION
+
 # SEE ALSO

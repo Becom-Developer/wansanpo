@@ -14,6 +14,8 @@ sanpo/pet - wansanpo ペット情報
 - POST - `/sanpo/pet/:id/update` - update - ペット情報更新実行
 - POST - `/sanpo/pet/:id/remove` - remove - ペット情報削除
 
+# DESCRIPTION
+
 ## GET - `/sanpo/pet/:id` - show - ペット情報詳細
 
 ```
