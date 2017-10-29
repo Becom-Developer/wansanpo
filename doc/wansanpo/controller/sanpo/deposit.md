@@ -1,6 +1,6 @@
 # NAME
 
-sanpo/deposit - wansanpo お散歩情報
+wansanpo/controller/sanpo/deposit - Wansanpo お散歩情報
 
 # SYNOPSIS
 
@@ -67,4 +67,12 @@ sanpo/deposit - wansanpo お散歩情報
 ```
 ```
 
+# TODO
+
 # SEE ALSO
+
+- `lib/Wansanpo/Controller/Sanpo/Deposit.pm` -
+- `lib/Wansanpo/Model/Sanpo/Deposit.pm` -
+- `templates/sanpo/deposit/welcome.html.ep` -
+- `t/wansanpo/controller/sanpo/deposit.t` -
+

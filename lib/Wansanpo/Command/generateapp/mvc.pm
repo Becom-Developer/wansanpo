@@ -116,6 +116,8 @@ use t::Util;
 my $test_util = t::Util->new();
 my $t         = $test_util->init;
 
+ok(1);
+
 done_testing();
 
 @@ welcome
