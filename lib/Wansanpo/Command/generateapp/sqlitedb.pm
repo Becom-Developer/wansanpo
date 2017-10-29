@@ -111,26 +111,26 @@ __END__
 
 =head1 NAME
 
-Wansanpo::Command::generate_db - Wansanpo create database
+Wansanpo::Command::generateapp::sqlitedb - Wansanpo create sqlite3 database
 
 =head1 SYNOPSIS
 
-  Usage: carton exec -- script/wansanpo generate_db [OPTIONS]
+  Usage: carton exec -- script/wansanpo generateapp sqlitedb [OPTIONS]
 
   Options:
     -m, --mode   Does something.
 
     # 開発用 (mode 指定なし) -> /db/wansanpo.development.db
-    $ carton exec -- script/wansanpo generate_db
+    $ carton exec -- script/wansanpo generateapp sqlitedb
 
     # 本番用 -> /db/wansanpo.production.db
-    $ carton exec -- script/wansanpo generate_db --mode production
+    $ carton exec -- script/wansanpo generateapp sqlitedb --mode production
 
     # テスト用 -> /db/wansanpo.testing.db
-    $ carton exec -- script/wansanpo generate_db --mode testing
+    $ carton exec -- script/wansanpo generateapp sqlitedb --mode testing
 
     # 開発用 -> /db/wansanpo.development.db
-    $ carton exec -- script/wansanpo generate_db --mode development
+    $ carton exec -- script/wansanpo generateapp sqlitedb --mode development
 
 =head1 DESCRIPTION
 
