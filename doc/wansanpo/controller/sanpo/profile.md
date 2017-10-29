@@ -1,6 +1,6 @@
 # NAME
 
-sanpo/profile - wansanpo ユーザー情報
+wansanpo/controller/sanpo/profile - Wansanpo ユーザー情報
 
 # SYNOPSIS
 
@@ -66,4 +66,10 @@ TODO
     削除はユーザー本人もしくは管理権限が admin 以上のユーザー
 ```
 
+# TODO
+
 # SEE ALSO
+
+- `lib/Wansanpo/Controller/Sanpo/Profile.pm` -
+- `lib/Wansanpo/Model/Sanpo/Profile.pm` -
+- `t/wansanpo/controller/sanpo/profile.t` -

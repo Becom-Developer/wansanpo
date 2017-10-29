@@ -1,6 +1,6 @@
 # NAME
 
-/auth - wansanpo アプリ認証
+wansanpo/controller/auth - Wansanpo アプリ認証
 
 # SYNOPSIS
 
@@ -92,4 +92,10 @@ TODO
     ログイン中の自分自身のパスワードしか更新できない
 ```
 
+# TODO
+
 # SEE ALSO
+
+- `lib/Wansanpo/Controller/Auth.pm` -
+- `lib/Wansanpo/Model/Auth.pm` -
+- `t/wansanpo/controller/auth.t` -

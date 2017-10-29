@@ -1,6 +1,6 @@
 # NAME
 
-sanpo/message - wansanpo メッセージ
+wansanpo/controller/sanpo/message - Wansanpo メッセージ
 
 # SYNOPSIS
 
@@ -74,6 +74,10 @@ sanpo/message - wansanpo メッセージ
 ```
 ```
 
+# TODO
 
 # SEE ALSO
 
+- `lib/Wansanpo/Controller/Sanpo/Message.pm` -
+- `lib/Wansanpo/Model/Sanpo/Message.pm` -
+- `t/wansanpo/controller/sanpo/message.t` -

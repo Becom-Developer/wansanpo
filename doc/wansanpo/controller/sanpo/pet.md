@@ -1,6 +1,6 @@
 # NAME
 
-sanpo/pet - wansanpo ペット情報
+wansanpo/controller/sanpo/pet - Wansanpo ペット情報
 
 # SYNOPSIS
 
@@ -89,4 +89,10 @@ TODO
 ```
 ```
 
+# TODO
+
 # SEE ALSO
+
+- `lib/Wansanpo/Controller/Sanpo/Pet.pm` -
+- `lib/Wansanpo/Model/Sanpo/Pet.pm` -
+- `t/wansanpo/controller/sanpo/pet.t` -
