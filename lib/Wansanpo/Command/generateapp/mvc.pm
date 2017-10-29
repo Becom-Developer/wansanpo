@@ -24,25 +24,46 @@ sub run {
     my $appclass = $home->path('lib')->list->first->basename('.pm');
 
     # Controller
-    my $controller = join '::', $appclass, 'Controller', @class_names;
-    my $path = class_to_path $controller;
-    $self->render_to_rel_file( 'controller', "lib/$path", $controller,
-        $appclass );
+    my $controller      = join '::', $appclass, 'Controller', @class_names;
+    my $controller_file = class_to_path $controller;
+    my $controller_args = +{
+        class   => $controller,
+        appname => $appclass,
+    };
+    $self->render_to_rel_file( 'controller', "lib/$controller_file",
+        $controller_args );
 
     # Test
-    $path = join '/', split '::', $controller;
-    $path = lc $path . '.t';
-    $self->render_to_rel_file( 'test', "t/$path" );
+    my $test_name = lc join '/', split '::', $controller;
+    my $test_file = $test_name . '.t';
+    $self->render_to_rel_file( 'test', "t/$test_file" );
 
     # Templates
-    $path = join '/', @class_names, 'welcome';
-    $path = lc $path . '.html.ep';
-    $self->render_to_rel_file( 'welcome', "templates/$path" );
+    my $templates_name = lc join '/', @class_names, 'welcome';
+    my $templates_file = $templates_name . '.html.ep';
+    $self->render_to_rel_file( 'welcome', "templates/$templates_file" );
 
     # Model
-    my $model = join '::', $appclass, 'Model', @class_names;
-    $path = class_to_path $model;
-    $self->render_to_rel_file( 'model', "lib/$path", $model, $appclass );
+    my $model      = join '::', $appclass, 'Model', @class_names;
+    my $model_file = class_to_path $model;
+    my $model_args = +{
+        class   => $model,
+        appname => $appclass,
+    };
+    $self->render_to_rel_file( 'model', "lib/$model_file", $model_args );
+
+    # Doc
+    my $doc_name = lc join '/', split '::', $controller;
+    my $doc_file = $doc_name . '.md';
+    my $doc_args = +{
+        name       => $doc_name,
+        appname    => $appclass,
+        controller => $controller_file,
+        model      => $model_file,
+        templates  => $templates_file,
+        test       => $test_file,
+    };
+    $self->render_to_rel_file( 'doc', "doc/$doc_file", $doc_args );
     return;
 }
 
@@ -74,27 +95,13 @@ Wansanpo::Command::generateapp::mvc - Wansanpo mvc
 __DATA__
 
 @@ controller
-% my $class = shift;
-% my $appname = shift;
-package <%= $class %>;
-use Mojo::Base '<%= $appname %>::Controller';
+% my $args = shift;
+package <%= $args->{class} %>;
+use Mojo::Base '<%= $args->{appname} %>::Controller';
 
 sub welcome {
     my $self = shift;
     $self->render(text => 'welcome');
-}
-
-1;
-
-@@ model
-% my $class = shift;
-% my $appname = shift;
-package <%= $class %>;
-use Mojo::Base '<%= $appname %>::Model::Base';
-
-sub welcome {
-    my $self = shift;
-    return;
 }
 
 1;
@@ -114,3 +121,36 @@ done_testing();
 @@ welcome
 %% layout '';
 %% title '';
+
+@@ model
+% my $args = shift;
+package <%= $args->{class} %>;
+use Mojo::Base '<%= $args->{appname} %>::Model::Base';
+
+sub welcome {
+    my $self = shift;
+    return;
+}
+
+1;
+
+@@ doc
+% my $args = shift;
+# NAME
+
+<%= $args->{name} %> - <%= $args->{appname} %>
+
+# SYNOPSIS
+
+## URL
+
+# DESCRIPTION
+
+# TODO
+
+# SEE ALSO
+
+- `lib/<%= $args->{controller} %>` -
+- `lib/<%= $args->{model} %>` -
+- `templates/<%= $args->{templates} %>` -
+- `t/<%= $args->{test} %>` -
