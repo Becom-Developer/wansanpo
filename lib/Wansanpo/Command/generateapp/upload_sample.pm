@@ -41,17 +41,7 @@ Wansanpo::Command::generateapp::upload_sample - Wansanpo upload sample data
   Options:
     -m, --mode   Does something.
 
-    # 開発用 (mode 指定なし) -> /db/wansanpo.development.db
     $ carton exec -- script/wansanpo generateapp upload_sample
-
-    # 本番用 -> /db/wansanpo.production.db
-    $ carton exec -- script/wansanpo generateapp upload_sample --mode production
-
-    # テスト用 -> /db/wansanpo.testing.db
-    $ carton exec -- script/wansanpo generateapp upload_sample --mode testing
-
-    # 開発用 -> /db/wansanpo.development.db
-    $ carton exec -- script/wansanpo generateapp upload_sample --mode development
 
 =head1 DESCRIPTION
 
