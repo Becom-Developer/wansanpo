@@ -6,7 +6,7 @@ binmode STDOUT, ':encoding(UTF-8)';
 
 has description => 'Wansanpo create database';
 has usage => sub { shift->extract_usage };
-has [qw{csv_files_delete_header index_sample_data sqlite_cmd}];
+has [qw{}];
 
 sub run {
     my $self = shift;
