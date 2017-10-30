@@ -1,4 +1,4 @@
-package Wansanpo::Command::generateapp::mvc;
+package Wansanpo::Command::generatemore::mvc;
 use Mojo::Base 'Mojolicious::Command';
 use Mojo::Util qw{dumper class_to_file class_to_path};
 
@@ -73,18 +73,18 @@ sub run {
 
 =head1 NAME
 
-Wansanpo::Command::generateapp::mvc - Wansanpo mvc
+Wansanpo::Command::generatemore::mvc - Wansanpo mvc
 
 =head1 SYNOPSIS
 
-  Usage: carton exec -- script/wansanpo generateapp mvc [OPTIONS]
+  Usage: carton exec -- script/wansanpo generatemore mvc [OPTIONS]
 
   Options:
     -m, --mode   Does something.
 
     # package MyApp::Controller::Auth::Test; の場合
 
-    $ carton exec -- script/wansanpo generateapp mvc Auth Test
+    $ carton exec -- script/wansanpo generatemore mvc Auth Test
 
     # コントローラ, モデル, テンプレート, テストコードが作成
 

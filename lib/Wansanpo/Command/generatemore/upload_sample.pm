@@ -1,4 +1,4 @@
-package Wansanpo::Command::generateapp::upload_sample;
+package Wansanpo::Command::generatemore::upload_sample;
 use Mojo::Base 'Mojolicious::Command';
 
 has description => 'Wansanpo create upload sample data';
@@ -32,16 +32,16 @@ __END__
 
 =head1 NAME
 
-Wansanpo::Command::generateapp::upload_sample - Wansanpo upload sample data
+Wansanpo::Command::generatemore::upload_sample - Wansanpo upload sample data
 
 =head1 SYNOPSIS
 
-  Usage: carton exec -- script/wansanpo generateapp upload_sample [OPTIONS]
+  Usage: carton exec -- script/wansanpo generatemore upload_sample [OPTIONS]
 
   Options:
     -m, --mode   Does something.
 
-    $ carton exec -- script/wansanpo generateapp upload_sample
+    $ carton exec -- script/wansanpo generatemore upload_sample
 
 =head1 DESCRIPTION
 

@@ -1,4 +1,4 @@
-package Wansanpo::Command::generateapp::sqlitedb;
+package Wansanpo::Command::generatemore::sqlitedb;
 use Mojo::Base 'Mojolicious::Command';
 use File::Temp;
 binmode STDIN,  ':encoding(UTF-8)';
@@ -111,26 +111,26 @@ __END__
 
 =head1 NAME
 
-Wansanpo::Command::generateapp::sqlitedb - Wansanpo create sqlite3 database
+Wansanpo::Command::generatemore::sqlitedb - Wansanpo create sqlite3 database
 
 =head1 SYNOPSIS
 
-  Usage: carton exec -- script/wansanpo generateapp sqlitedb [OPTIONS]
+  Usage: carton exec -- script/wansanpo generatemore sqlitedb [OPTIONS]
 
   Options:
     -m, --mode   Does something.
 
     # 開発用 (mode 指定なし) -> /db/wansanpo.development.db
-    $ carton exec -- script/wansanpo generateapp sqlitedb
+    $ carton exec -- script/wansanpo generatemore sqlitedb
 
     # 本番用 -> /db/wansanpo.production.db
-    $ carton exec -- script/wansanpo generateapp sqlitedb --mode production
+    $ carton exec -- script/wansanpo generatemore sqlitedb --mode production
 
     # テスト用 -> /db/wansanpo.testing.db
-    $ carton exec -- script/wansanpo generateapp sqlitedb --mode testing
+    $ carton exec -- script/wansanpo generatemore sqlitedb --mode testing
 
     # 開発用 -> /db/wansanpo.development.db
-    $ carton exec -- script/wansanpo generateapp sqlitedb --mode development
+    $ carton exec -- script/wansanpo generatemore sqlitedb --mode development
 
 =head1 DESCRIPTION
 
