@@ -9,12 +9,6 @@ Wansanpo::DB::Teng::Row::Profile - Teng Row オブジェクト拡張
 
 =cut
 
-# 呼び出しテスト
-sub welcome {
-    my $self = shift;
-    return 'welcome Wansanpo::DB::Teng::Row::Profile!!';
-}
-
 sub fetch_user {
     my $self = shift;
     my $cond = +{ id => $self->user_id, deleted => 0, };
