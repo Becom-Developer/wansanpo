@@ -39,9 +39,9 @@ sub run {
     $self->render_to_rel_file( 'test', "t/$test_file" );
 
     # Templates
-    my $templates_name = lc join '/', @class_names, 'welcome';
+    my $templates_name = lc join '/', @class_names, 'index';
     my $templates_file = $templates_name . '.html.ep';
-    $self->render_to_rel_file( 'welcome', "templates/$templates_file" );
+    $self->render_to_rel_file( 'index', "templates/$templates_file" );
 
     # Model
     my $model      = join '::', $appclass, 'Model', @class_names;
@@ -99,9 +99,9 @@ __DATA__
 package <%= $args->{class} %>;
 use Mojo::Base '<%= $args->{appname} %>::Controller';
 
-sub welcome {
+sub index {
     my $self = shift;
-    $self->render(text => 'welcome');
+    $self->render(text => 'index');
 }
 
 1;
@@ -120,7 +120,7 @@ ok(1);
 
 done_testing();
 
-@@ welcome
+@@ index
 %% layout '';
 %% title '';
 
@@ -129,7 +129,7 @@ done_testing();
 package <%= $args->{class} %>;
 use Mojo::Base '<%= $args->{appname} %>::Model::Base';
 
-sub welcome {
+sub index {
     my $self = shift;
     return;
 }
@@ -149,6 +149,17 @@ sub welcome {
 # DESCRIPTION
 
 # TODO
+
+```
+- GET - `/example/create` - create
+- GET - `/example/search` - search
+- GET - `/example` - index
+- GET - `/example/:id/edit` - edit
+- GET - `/example/:id` - show
+- POST - `/example` - store
+- POST - `/example/:id/update` - update
+- POST - `/example/:id/remove` - remove
+```
 
 # SEE ALSO
 
