@@ -9,6 +9,12 @@ Wansanpo::DB::Teng::Row::Message - Teng Row オブジェクト拡張
 
 =cut
 
+# 呼び出しテスト
+sub welcome {
+    my $self = shift;
+    return 'welcome Wansanpo::DB::Teng::Row::Message!!';
+}
+
 # to_user_id の詳細を取得
 sub fetch_to_user_row {
     my $self = shift;

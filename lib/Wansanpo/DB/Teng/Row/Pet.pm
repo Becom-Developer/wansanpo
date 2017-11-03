@@ -9,6 +9,12 @@ Wansanpo::DB::Teng::Row::Pet - Teng Row オブジェクト拡張
 
 =cut
 
+# 呼び出しテスト
+sub welcome {
+    my $self = shift;
+    return 'welcome Wansanpo::DB::Teng::Row::Pet!!';
+}
+
 sub fetch_user {
     my $self = shift;
     my $cond = +{ id => $self->user_id, deleted => 0, };
