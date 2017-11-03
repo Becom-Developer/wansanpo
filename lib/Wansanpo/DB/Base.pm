@@ -5,21 +5,7 @@ use Teng;
 use Teng::Schema::Loader;
 Teng->load_plugin('Pager');
 
-=encoding utf8
-
-=head1 NAME
-
-Wansanpo::DB::Base - データベースオブジェクト (共通)
-
-=cut
-
 has [qw{conf}];
-
-# 呼び出しテスト
-sub welcome {
-    my $self = shift;
-    return 'welcome Wansanpo::DB::Base!!';
-}
 
 sub teng {
     my $self = shift;
@@ -67,3 +53,11 @@ sub teng_update {
 1;
 
 __END__
+
+=encoding utf8
+
+=head1 NAME
+
+Wansanpo::DB::Base - データベースオブジェクト (共通)
+
+=cut

@@ -1,14 +1,8 @@
 package Wansanpo::DB::Master;
-use Mojo::Base 'Wansanpo::DB::Base';
+use Mojo::Base -base;
 use Mojo::Util qw{dumper};
 
 has [qw{master_hash master_constant_hash}];
-
-# 呼び出しテスト
-sub welcome {
-    my $self = shift;
-    return 'welcome Wansanpo::DB::Master!!';
-}
 
 # approved 承認
 sub approved {
