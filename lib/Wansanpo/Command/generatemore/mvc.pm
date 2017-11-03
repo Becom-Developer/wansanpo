@@ -97,7 +97,7 @@ __DATA__
 @@ controller
 % my $args = shift;
 package <%= $args->{class} %>;
-use Mojo::Base '<%= $args->{appname} %>::Controller';
+use Mojo::Base '<%= $args->{appname} %>::Controller::Base';
 
 sub index {
     my $self = shift;

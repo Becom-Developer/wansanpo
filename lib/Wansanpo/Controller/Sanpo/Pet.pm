@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Sanpo::Pet;
-use Mojo::Base 'Wansanpo::Controller::Sanpo';
+use Mojo::Base 'Wansanpo::Controller::Base';
 
 # テンプレ用共通スタッシュ
 sub _template_common {

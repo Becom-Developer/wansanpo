@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Auth;
-use Mojo::Base 'Wansanpo::Controller';
+use Mojo::Base 'Wansanpo::Controller::Base';
 
 # テンプレ用共通スタッシュ
 sub _template_common {

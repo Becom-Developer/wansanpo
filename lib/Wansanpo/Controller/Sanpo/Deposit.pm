@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Sanpo::Deposit;
-use Mojo::Base 'Wansanpo::Controller';
+use Mojo::Base 'Wansanpo::Controller::Base';
 
 sub welcome {
     my $self = shift;

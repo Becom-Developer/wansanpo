@@ -1,5 +1,5 @@
 package Wansanpo::Controller::Info;
-use Mojo::Base 'Wansanpo::Controller';
+use Mojo::Base 'Wansanpo::Controller::Base';
 
 # info 現状のレポート
 sub index {

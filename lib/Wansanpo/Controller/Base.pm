@@ -1,4 +1,4 @@
-package Wansanpo::Controller;
+package Wansanpo::Controller::Base;
 use Mojo::Base 'Mojolicious::Controller';
 use HTML::FillInForm::Lite;
 use Wansanpo::Util qw{easy_filename has_suffix_error};
