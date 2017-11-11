@@ -133,7 +133,7 @@ $ cd ~/
 $ pwd
 /home/wansanpo
 $ git clone git@github.com:ykHakata/wansanpo.git
-$ cd ~/wansanpo/
+$ cd ~/wansanpo/wansanpo/
 $ pwd
 /home/wansanpo/wansanpo
 
