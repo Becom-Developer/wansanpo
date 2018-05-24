@@ -6,7 +6,7 @@ wansanpo - 犬のお散歩マッチングサービス
 
 ## URL
 
-<http://nyans.work/> - 開発用サーバー
+<http://nyans.becom.work/> - 開発用サーバー
 
 ## LOCAL SETUP
 
@@ -97,7 +97,7 @@ $ carton exec -- hypnotoad script/wansanpo
 $ carton exec -- hypnotoad --stop script/wansanpo
 ```
 
-web ブラウザ <http://nyans.work/> で確認
+web ブラウザ <http://nyans.becom.work/> で確認
 
 ## TEST
 
