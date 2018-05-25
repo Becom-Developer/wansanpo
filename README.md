@@ -20,7 +20,7 @@ wansanpo - 犬のお散歩マッチングサービス
 
 お手元の PC に任意のディレクトリを準備後、 github サイトよりリポジトリを取得
 
-<https://github.com/ykHakata/wansanpo> - wansanpo / github サイト
+<https://github.com/Becom-Developer/wansanpo> - wansanpo / github サイト
 
 ```
 (例: ホームディレクト配下に github 用のディレクトリ作成)
@@ -28,7 +28,7 @@ $ mkdir ~/github
 
 # github ディレクトリ配下に wansanpo リポジトリ展開
 $ cd ~/github
-$ git clone git@github.com:ykHakata/wansanpo.git
+$ git clone git@github.com:Becom-Developer/wansanpo.git
 ```
 
 #### Perl install
@@ -127,6 +127,9 @@ $ carton exec -- script/wansanpo test -v t/wansanpo.t
 ```
 (ローカル環境から各自のアカウントでログイン)
 $ ssh taniguti@153.126.137.205
+
+(もしくは)
+$ ssh taniguti@nyans.becom.work
 
 (アプリケーションユーザーに)
 $ sudo su - wansanpo
